@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Zap, TrendingUp, DollarSign, Sparkles } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
+
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
 
 interface Props {
