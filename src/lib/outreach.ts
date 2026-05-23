@@ -229,3 +229,50 @@ export function generateAccountOutreach(account: Account, signals: Signal[]): Ou
   })[0];
   return generateOutreach(account, top);
 }
+
+// Combined outreach across multiple selected signals
+export function generateMultiOutreach(account: Account, signals: Signal[]): Outreach | null {
+  if (signals.length === 0) return null;
+  if (signals.length === 1) return generateOutreach(account, signals[0]);
+
+  const sorted = [...signals].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+  const types = Array.from(new Set(sorted.map((s) => s.type)));
+
+  const angle = `Several recent signals at ${account.name} point in the same direction — ${sorted
+    .map((s) => `${s.type.toLowerCase()} (${s.description.split(".")[0].toLowerCase()})`)
+    .slice(0, 3)
+    .join("; ")}${sorted.length > 3 ? `; and ${sorted.length - 3} more` : ""}. Taken together, this is the moment to lead with a single narrative that ties them into one AfterQuery proposal rather than chasing each thread separately.`;
+
+  const emailSubject = `A few things on our radar for ${account.name}`;
+
+  const bullets = sorted.map((s) => `• ${s.type}: ${s.description.replace(/\.$/, "")}`).join("\n");
+  const emailBody = `Hi ${firstName(account.contactName)},
+
+A handful of signals on the ${account.name} side have stacked up over the last few weeks, and I wanted to put them in front of you together rather than in separate threads:
+
+${bullets}
+
+Individually, any one of these is worth a conversation. Together, they suggest a clear window for AfterQuery to step in with a coordinated plan — SME-vetted annotator pods, tailored eval coverage, and a single point of contact across workstreams.
+
+Worth a 25-minute walkthrough next week?
+
+Best,
+[Your name]
+AfterQuery`;
+
+  const talkingPoints = [
+    `Open by naming the pattern: ${types.join(", ")} signals all landing in the same window.`,
+    `Walk through each signal briefly and connect it to a concrete AfterQuery motion.`,
+    `Propose one coordinated plan rather than ${sorted.length} separate workstreams.`,
+    `Identify the single decision-maker who can greenlight a combined engagement.`,
+    `Close on a 2-week pilot scoped to the highest-urgency signal.`,
+  ];
+
+  const valueProps = Array.from(
+    new Set(types.flatMap((t) => VALUE_PROPS_BY_TYPE[t].slice(0, 1)))
+  );
+
+  return { angle, emailSubject, emailBody, talkingPoints, valueProps };
+}
