@@ -43,6 +43,7 @@ export const accounts: Account[] = [
     tags: ["Expansion Opportunity"],
     contactName: "Priya Shah",
     contactRole: "Head of Post-Training",
+    contactEmail: "priya.shah@helixai.com",
     contractValue: 480_000,
   },
 
@@ -54,6 +55,7 @@ export const accounts: Account[] = [
     tags: ["Churn Risk"],
     contactName: "Marcus Chen",
     contactRole: "VP Research Operations",
+    contactEmail: "marcus.chen@meridianlabs.com",
     contractValue: 1_800_000,
   },
   {
@@ -64,6 +66,7 @@ export const accounts: Account[] = [
     tags: ["Expansion Opportunity"],
     contactName: "Elena Volkov",
     contactRole: "Director of Model Training",
+    contactEmail: "elena.volkov@synthos.com",
     contractValue: 950_000,
   },
   {
@@ -74,6 +77,7 @@ export const accounts: Account[] = [
     tags: ["Churn Risk", "Expansion Opportunity"],
     contactName: "James O'Sullivan",
     contactRole: "Head of Post-Training",
+    contactEmail: "james.osullivan@arclightai.com",
     contractValue: 3_100_000,
   },
   {
@@ -84,6 +88,7 @@ export const accounts: Account[] = [
     tags: ["Expansion Opportunity"],
     contactName: "Aisha Patel",
     contactRole: "Data Lead",
+    contactEmail: "aisha.patel@vantaresearch.com",
     contractValue: 620_000,
   },
   {
@@ -94,6 +99,7 @@ export const accounts: Account[] = [
     tags: ["New Opportunity"],
     contactName: "Daniel Reyes",
     contactRole: "Co-founder & CTO",
+    contactEmail: "daniel.reyes@quantumminds.com",
   },
   {
     id: "orbital",
@@ -103,6 +109,7 @@ export const accounts: Account[] = [
     tags: ["New Opportunity"],
     contactName: "Sophia Lindqvist",
     contactRole: "VP Engineering",
+    contactEmail: "sophia.lindqvist@orbitalml.com",
   },
   {
     id: "stratos",
@@ -112,6 +119,7 @@ export const accounts: Account[] = [
     tags: ["New Opportunity"],
     contactName: "Col. Robert Hayes (ret.)",
     contactRole: "Chief AI Officer",
+    contactEmail: "robert.hayes@stratosai.com",
   },
   {
     id: "deepform",
@@ -121,6 +129,7 @@ export const accounts: Account[] = [
     tags: ["New Opportunity"],
     contactName: "Dr. Yuki Tanaka",
     contactRole: "Head of ML",
+    contactEmail: "yuki.tanaka@deepform.com",
   },
   {
     id: "nexus",
@@ -130,6 +139,7 @@ export const accounts: Account[] = [
     tags: ["New Opportunity"],
     contactName: "Olivia Brennan",
     contactRole: "SVP Product",
+    contactEmail: "olivia.brennan@nexusintel.com",
   },
 ];
 
