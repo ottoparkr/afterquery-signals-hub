@@ -9,7 +9,6 @@ export interface Outreach {
 }
 
 const firstName = (full: string) => full.replace(/^(Dr\.|Col\.)\s+/, "").split(" ")[0];
-const lcFirst = (s: string) => (s ? s.charAt(0).toLowerCase() + s.slice(1) : s);
 
 const VALUE_PROPS_BY_TYPE: Record<SignalType, string[]> = {
   Funding: [
