@@ -243,15 +243,18 @@ function SignalCard({
     }`}>
       {/* Selection checkbox (top-left) — visible on hover or when selected */}
       <button
-        onClick={onToggleSelect}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleSelect();
+        }}
         aria-label={selected ? "Deselect signal" : "Select signal"}
-        className={`absolute top-2 left-2 size-4 rounded border flex items-center justify-center transition-opacity ${
+        className={`absolute top-2 left-2 z-10 size-4 rounded border flex items-center justify-center transition-opacity ${
           selected
             ? "opacity-100 bg-amber-400 border-amber-400 text-zinc-900"
             : "opacity-0 group-hover:opacity-100 bg-background border-border hover:border-amber-400/60"
         }`}
       >
-        {selected && <X className="size-3" />}
+        {selected && <Check className="size-3" strokeWidth={3} />}
       </button>
 
       <div className="flex items-start gap-3">
