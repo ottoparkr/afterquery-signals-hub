@@ -50,7 +50,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-5">
         {signal && (
           <div className="rounded-md border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5 mb-0.5">

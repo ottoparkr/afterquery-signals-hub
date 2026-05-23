@@ -42,42 +42,32 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
     <section className="flex-1 flex flex-col min-w-0 h-screen bg-background">
       {/* Header */}
       <div className="px-6 py-5 border-b border-border">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold tracking-tight truncate">{account.name}</h1>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                account.type === "Existing Client"
-                  ? "bg-opportunity/15 text-opportunity"
-                  : "bg-primary/15 text-primary"
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-lg font-semibold tracking-tight">{account.name}</h1>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+              account.type === "Existing Client"
+                ? "bg-opportunity/15 text-opportunity"
+                : "bg-primary/15 text-primary"
+            }`}>
+              {account.type}
+            </span>
+            {account.tags.map((t) => (
+              <span key={t} className={`text-[10px] px-2 py-0.5 rounded-full ${
+                t === "Churn Risk" ? "bg-risk/15 text-risk" : "bg-muted text-muted-foreground"
               }`}>
-                {account.type}
+                {t}
               </span>
-              {account.tags.map((t) => (
-                <span key={t} className={`text-[10px] px-2 py-0.5 rounded-full ${
-                  t === "Churn Risk" ? "bg-risk/15 text-risk" : "bg-muted text-muted-foreground"
-                }`}>
-                  {t}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm text-muted-foreground mt-1">{account.description}</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              <span className="text-foreground">{account.contactName}</span> · {account.contactRole}
-            </p>
+            ))}
           </div>
-
-          <button
-            onClick={onGenerateAccount}
-            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-          >
-            <Sparkles className="size-3.5" />
-            Generate Outreach
-          </button>
+          <p className="text-sm text-muted-foreground mt-1">{account.description}</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            <span className="text-foreground">{account.contactName}</span> · {account.contactRole}
+          </p>
         </div>
 
         {/* Stats */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-4 flex-wrap">
           <Stat icon={TrendingUp} label="Signals" value={accountSignals.length.toString()} />
           <Stat icon={Zap} label="High urgency" value={highCount.toString()}
             tone={highCount > 0 ? "high" : undefined} />
@@ -174,9 +164,9 @@ function SignalCard({ signal, active, onGenerate }: { signal: Signal; active: bo
             </div>
             <button
               onClick={onGenerate}
-              className="text-[11px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors opacity-0 group-hover:opacity-100"
+              className="text-[11px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors"
             >
-              Generate outreach →
+              Outreach ↗
             </button>
           </div>
         </div>
