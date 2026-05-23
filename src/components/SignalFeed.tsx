@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Zap, TrendingUp, DollarSign, Check } from "lucide-react";
+import { Zap, TrendingUp, DollarSign, Check, Brain } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
 
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
@@ -10,6 +10,7 @@ interface Props {
   onGenerate: (signal: Signal) => void;
   onGenerateAccount: () => void;
   onGenerateMulti: (signals: Signal[]) => void;
+  onOpenIntel: () => void;
   activeSignalId?: string;
 }
 
@@ -28,7 +29,7 @@ const WINDOW_MS: Record<TimeWindow, number | null> = {
   All: null,
 };
 
-export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, activeSignalId }: Props) {
+export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOpenIntel, activeSignalId }: Props) {
   const [filter, setFilter] = useState<FeedFilter>("All");
   const [timeWindow, setTimeWindow] = useState<TimeWindow>("30D");
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -83,28 +84,37 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, acti
     <section className="flex-1 flex flex-col min-w-0 h-screen bg-background overflow-x-hidden relative">
       {/* Header */}
       <div className="px-6 py-5 border-b border-border">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-lg font-semibold tracking-tight">{account.name}</h1>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-              account.type === "Existing Client"
-                ? "bg-opportunity/15 text-opportunity"
-                : "bg-primary/15 text-primary"
-            }`}>
-              {account.type}
-            </span>
-            {account.tags.map((t) => (
-              <span key={t} className={`text-[10px] px-2 py-0.5 rounded-full ${
-                t === "Churn Risk" ? "bg-risk/15 text-risk" : "bg-muted text-muted-foreground"
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-lg font-semibold tracking-tight">{account.name}</h1>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                account.type === "Existing Client"
+                  ? "bg-opportunity/15 text-opportunity"
+                  : "bg-primary/15 text-primary"
               }`}>
-                {t}
+                {account.type}
               </span>
-            ))}
+              {account.tags.map((t) => (
+                <span key={t} className={`text-[10px] px-2 py-0.5 rounded-full ${
+                  t === "Churn Risk" ? "bg-risk/15 text-risk" : "bg-muted text-muted-foreground"
+                }`}>
+                  {t}
+                </span>
+              ))}
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">{account.description}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="text-foreground">{account.contactName}</span> · {account.contactRole}
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">{account.description}</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            <span className="text-foreground">{account.contactName}</span> · {account.contactRole}
-          </p>
+          <button
+            onClick={onOpenIntel}
+            className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md border border-border text-foreground hover:border-amber-400/60 hover:text-amber-400 transition-colors"
+          >
+            <Brain className="size-3.5" />
+            Intel
+          </button>
         </div>
 
         {/* Stats */}
