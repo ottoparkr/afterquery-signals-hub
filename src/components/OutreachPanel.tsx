@@ -28,6 +28,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
   useEffect(() => {
     if (lastKey.current !== resetKey) {
       lastKey.current = resetKey;
+      setTo(account.contactEmail);
       setSubject(base?.emailSubject ?? "");
       setBody(base?.emailBody ?? "");
       setPoints(base?.talkingPoints ?? []);
@@ -37,6 +38,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
 
   const regenerate = () => {
     if (!base) return;
+    setTo(account.contactEmail);
     setSubject(base.emailSubject);
     setBody(base.emailBody);
     setPoints(base.talkingPoints);
@@ -50,10 +52,10 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     );
   }
 
-  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+    navigator.clipboard.writeText(`To: ${to}\nSubject: ${subject}\n\n${body}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
