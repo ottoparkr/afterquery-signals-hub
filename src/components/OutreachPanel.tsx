@@ -205,11 +205,19 @@ function EditablePoint({ value, onChange }: { value: string; onChange: (v: strin
   const [draft, setDraft] = useState(value);
   useEffect(() => setDraft(value), [value]);
 
+  const commit = () => {
+    setEditing(false);
+    if (draft !== value) onChange(draft);
+  };
+
   if (editing) {
     return (
-      <AutoTextarea
+      <textarea
+        autoFocus
         value={draft}
-        onChange={setDraft}
+        rows={Math.max(1, draft.split("\n").length)}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
         className="flex-1 bg-transparent text-sm text-foreground/90 leading-relaxed border border-primary/60 rounded px-2 py-1 focus:outline-none resize-none"
       />
     );
