@@ -16,6 +16,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     ? generateOutreach(account, signal)
     : generateAccountOutreach(account, accountSignals);
 
+  const [to, setTo] = useState(account.contactEmail);
   const [subject, setSubject] = useState(base?.emailSubject ?? "");
   const [body, setBody] = useState(base?.emailBody ?? "");
   const [points, setPoints] = useState<string[]>(base?.talkingPoints ?? []);
@@ -27,6 +28,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
   useEffect(() => {
     if (lastKey.current !== resetKey) {
       lastKey.current = resetKey;
+      setTo(account.contactEmail);
       setSubject(base?.emailSubject ?? "");
       setBody(base?.emailBody ?? "");
       setPoints(base?.talkingPoints ?? []);
@@ -36,6 +38,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
 
   const regenerate = () => {
     if (!base) return;
+    setTo(account.contactEmail);
     setSubject(base.emailSubject);
     setBody(base.emailBody);
     setPoints(base.talkingPoints);
@@ -49,10 +52,10 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     );
   }
 
-  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+    navigator.clipboard.writeText(`To: ${to}\nSubject: ${subject}\n\n${body}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -100,7 +103,13 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
 
         <Section icon={<Mail className="size-3.5 text-primary" />} title="Draft email">
           <div className="space-y-2">
-            <div className="text-[11px] text-muted-foreground">Subject</div>
+            <div className="text-[11px] text-muted-foreground">To</div>
+            <input
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="w-full bg-transparent text-sm text-foreground/90 border-0 border-b border-transparent focus:border-primary/60 focus:outline-none px-0 py-1"
+            />
+            <div className="text-[11px] text-muted-foreground pt-2">Subject</div>
             <input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}

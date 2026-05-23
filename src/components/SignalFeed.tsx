@@ -39,7 +39,7 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
   const filters: FeedFilter[] = ["All", "Risk", "Opportunity", ...SIGNAL_TYPES];
 
   return (
-    <section className="flex-1 flex flex-col min-w-0 h-screen bg-background">
+    <section className="flex-1 flex flex-col min-w-0 h-screen bg-background overflow-x-hidden">
       {/* Header */}
       <div className="px-6 py-5 border-b border-border">
         <div className="min-w-0">
