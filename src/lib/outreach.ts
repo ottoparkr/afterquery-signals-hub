@@ -246,7 +246,54 @@ export function generateAccountOutreach(account: Account, signals: Signal[]): Ou
   return generateOutreach(account, top);
 }
 
+function buildCombinedAngle(account: Account, sorted: Signal[]): string {
+  const types = new Set(sorted.map((s) => s.type));
+  const hasFunding = types.has("Funding");
+  const hasUsage = types.has("Usage");
+  const hasHiring = types.has("Hiring");
+  const hasResearch = types.has("Research");
+  const hasPress = types.has("Press");
+  const hasCompetitor = types.has("Competitor");
+  const hasRelationship = types.has("Relationship");
+  const hasRisk = sorted.some((s) => s.classification === "Risk");
+
+  let lead: string;
+  if (hasFunding && hasUsage) {
+    lead = `${account.name} has fresh capital landing at the same moment their existing workstreams are hitting contracted ceilings — budget capacity and immediate data need are aligned in a way that rarely lines up this cleanly.`;
+  } else if (hasFunding && hasHiring) {
+    lead = `${account.name} is deploying fresh capital straight into a data-org build — the buy-vs-build decision is live right now, and the window to be the "buy" is measured in weeks, not quarters.`;
+  } else if (hasUsage && hasRisk) {
+    lead = `Workstream health at ${account.name} is degrading at the same time other signals are stacking up — this is a save motion first and an expansion conversation second, and the order matters.`;
+  } else if (hasPress && hasHiring) {
+    lead = `${account.name} just shipped publicly and is staffing up to sustain the momentum — they need v-next data and eval coverage faster than they can build the team to produce it.`;
+  } else if (hasResearch && hasHiring) {
+    lead = `${account.name}'s own research is naming the data bottleneck while they hire against it — we can show up with the exact capability they're trying to build internally.`;
+  } else if (hasCompetitor && (hasFunding || hasPress)) {
+    lead = `${account.name} is under concrete competitive pressure right as they have the resources to respond — the conversation is about helping them defend a position, not pitching a new one.`;
+  } else if (hasRelationship && hasRisk) {
+    lead = `Relationship signals at ${account.name} are trending the wrong way alongside operational ones — re-anchoring with the right stakeholders has to happen before any commercial conversation lands.`;
+  } else if (hasFunding) {
+    lead = `${account.name} just unlocked new capital and the surrounding signals all point to the same thing: they're about to make vendor decisions that will hold for the next 12 months.`;
+  } else {
+    lead = `Multiple independent signals at ${account.name} are converging on the same underlying story — their data needs are growing faster than their internal capacity to meet them.`;
+  }
+
+  let pitch: string;
+  if (hasRisk && !hasFunding) {
+    pitch = `The pitch is a credible remediation plan paired with a clear path to expansion once trust is rebuilt — not a new SOW.`;
+  } else if (hasFunding || hasPress) {
+    pitch = `The pitch is straightforward: AfterQuery can scale with them right now, across the workstreams that are already proving out, without the six-month internal ramp.`;
+  } else if (hasHiring) {
+    pitch = `The pitch is the "buy" option — an instrumented pod in two weeks while their incoming hires focus on strategy instead of ops.`;
+  } else {
+    pitch = `The pitch is a single coordinated engagement across these threads rather than chasing each one separately.`;
+  }
+
+  return `${lead} ${pitch}`;
+}
+
 // Combined outreach across multiple selected signals
+
 export function generateMultiOutreach(account: Account, signals: Signal[]): Outreach | null {
   if (signals.length === 0) return null;
   if (signals.length === 1) return generateOutreach(account, signals[0]);
