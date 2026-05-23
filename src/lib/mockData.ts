@@ -23,6 +23,7 @@ export interface Account {
   tags: AccountTag[];
   contactName: string;
   contactRole: string;
+  contactEmail: string;
   contractValue?: number; // existing clients only
 }
 
