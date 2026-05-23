@@ -142,11 +142,7 @@ export function OutreachPanel({ account, signal, multiSignals, accountSignals, o
             />
 
             <div className="text-[11px] text-muted-foreground pt-2">Body</div>
-            <AutoTextarea
-              value={body}
-              onChange={setBody}
-              className="w-full bg-transparent text-xs text-foreground/90 leading-relaxed font-sans border border-transparent rounded-md focus:border-primary/60 focus:outline-none px-2 py-2 resize-none"
-            />
+            <BodyEditor value={body} onChange={setBody} />
             <div className="flex flex-col gap-2 pt-2">
               <a
                 href={mailto}
@@ -231,6 +227,37 @@ function AutoTextarea({
       onChange={(e) => onChange(e.target.value)}
       rows={1}
       className={className}
+    />
+  );
+}
+
+function BodyEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const escapeHtml = (text: string) =>
+    text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  const renderHtml = (text: string) => {
+    const escaped = escapeHtml(text);
+    return escaped.replace(
+      /📅 Book a 25-minute call: https:\/\/calendly\.com\/afterquery\/intro/g,
+      `<a href="https://calendly.com/afterquery/intro" target="_blank" rel="noopener noreferrer" style="color:#fbbf24;text-decoration:underline;cursor:pointer;">📅 Book a 25-minute call: https://calendly.com/afterquery/intro</a>`
+    );
+  };
+
+  useEffect(() => {
+    if (ref.current && ref.current.textContent !== value) {
+      ref.current.innerHTML = renderHtml(value);
+    }
+  }, [value]);
+
+  return (
+    <div
+      ref={ref}
+      contentEditable
+      suppressContentEditableWarning
+      onInput={(e) => onChange(e.currentTarget.textContent || "")}
+      className="w-full bg-transparent text-xs text-foreground/90 leading-relaxed font-sans border border-transparent rounded-md focus:border-primary/60 focus:outline-none px-2 py-2 min-h-[80px] whitespace-pre-wrap"
     />
   );
 }

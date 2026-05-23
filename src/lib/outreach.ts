@@ -75,6 +75,8 @@ const SUBJECT_TEMPLATES: Record<SignalType, (a: Account) => string> = {
   Competitor: (a) => `A quick benchmark idea for ${a.name}`,
 };
 
+const CALENDAR_LINE = `📅 Book a 25-minute call: https://calendly.com/afterquery/intro`;
+
 const BODY_TEMPLATES: Record<SignalType, (a: Account, s: Signal) => string> = {
   Funding: (a, s) =>
     `Hi ${firstName(a.contactName)},
@@ -84,6 +86,8 @@ Saw the news — congrats on the raise. Funding rounds at your stage usually tra
 Specifically on the signal we picked up (${s.description}), we've spun up SME-vetted annotator pods for 3 frontier labs inside 14 days. Happy to share what that ramp looked like and what it could mean for ${a.name}'s next model release.
 
 Worth a 20-minute chat next week?
+
+${CALENDAR_LINE}
 
 Best,
 [Your name]
@@ -97,6 +101,8 @@ Launches like this usually trigger a wave of v-next data + eval needs. We've hel
 
 Open to a quick 20 min next week?
 
+${CALENDAR_LINE}
+
 Best,
 [Your name]
 AfterQuery`,
@@ -109,6 +115,8 @@ One thing stood out: ${s.description} That's the exact wedge AfterQuery is built
 
 Worth a 20-min walkthrough?
 
+${CALENDAR_LINE}
+
 Best,
 [Your name]
 AfterQuery`,
@@ -118,6 +126,8 @@ AfterQuery`,
 Noticed ${a.name} is hiring across the data org (${s.description.replace(/\.$/, "")}). Building that internally is a 6-month exercise; AfterQuery typically stands up an instrumented pod inside two weeks so your incoming Head of Data can focus on strategy instead of ops.
 
 Happy to share how we've done this with similar labs. 20 minutes next week?
+
+${CALENDAR_LINE}
 
 Best,
 [Your name]
@@ -129,6 +139,8 @@ Wanted to flag what we're seeing on the ${a.name} workstream: ${s.description}
 
 I'd like to walk you through a concrete remediation plan and, separately, a couple of adjacent workstreams where we think we can move the needle. Can we grab 30 minutes this week?
 
+${CALENDAR_LINE}
+
 Best,
 [Your name]
 AfterQuery`,
@@ -138,6 +150,8 @@ AfterQuery`,
 Wanted to reconnect — it's been a few weeks since we synced, and I want to make sure we're still aligned on what's most valuable to the ${a.name} team going into the next quarter.
 
 I have a short readout on workstream quality and a couple of expansion ideas. Could we grab 25 minutes this week?
+
+${CALENDAR_LINE}
 
 Best,
 [Your name]
@@ -150,6 +164,8 @@ You probably saw this already — ${s.description} Wanted to reach out proactive
 We've run head-to-head data-quality benchmarks for labs in similar situations and have a clear point of view on where AfterQuery's SME pools differentiate (and where we'd recommend you double down). Happy to share the benchmark methodology + initial read.
 
 Worth 20 minutes?
+
+${CALENDAR_LINE}
 
 Best,
 [Your name]
@@ -257,6 +273,8 @@ ${bullets}
 Individually, any one of these is worth a conversation. Together, they suggest a clear window for AfterQuery to step in with a coordinated plan — SME-vetted annotator pods, tailored eval coverage, and a single point of contact across workstreams.
 
 Worth a 25-minute walkthrough next week?
+
+${CALENDAR_LINE}
 
 Best,
 [Your name]
