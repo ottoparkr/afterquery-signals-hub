@@ -78,7 +78,7 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
       </div>
 
       {/* Filter bar */}
-      <div className="px-6 py-3 border-b border-border flex gap-1 overflow-x-auto">
+      <div className="px-6 py-3 border-b border-border flex flex-wrap gap-1 overflow-x-hidden">
         {filters.map((f) => (
           <button
             key={f}
