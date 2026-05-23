@@ -1,0 +1,268 @@
+export type AccountType = "Existing Client" | "Prospect";
+export type AccountTag = "Churn Risk" | "Expansion Opportunity" | "New Opportunity";
+export type SignalType = "Funding" | "Press" | "Research" | "Hiring" | "Usage" | "Relationship" | "Competitor";
+export type Classification = "Risk" | "Opportunity";
+export type Urgency = "High" | "Medium" | "Low";
+
+export interface Signal {
+  id: string;
+  accountId: string;
+  type: SignalType;
+  source: string;
+  timestamp: string; // ISO
+  description: string;
+  classification: Classification;
+  urgency: Urgency;
+}
+
+export interface Account {
+  id: string;
+  name: string;
+  description: string;
+  type: AccountType;
+  tags: AccountTag[];
+  contactName: string;
+  contactRole: string;
+  contractValue?: number; // existing clients only
+}
+
+const daysAgo = (n: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  d.setHours(d.getHours() - Math.floor(Math.random() * 12));
+  return d.toISOString();
+};
+
+export const accounts: Account[] = [
+  {
+    id: "helix",
+    name: "Helix AI",
+    description: "Foundation model lab focused on biological reasoning",
+    type: "Existing Client",
+    tags: ["Expansion Opportunity"],
+    contactName: "Dr. Priya Raman",
+    contactRole: "Head of Data",
+    contractValue: 2_400_000,
+  },
+  {
+    id: "meridian",
+    name: "Meridian Labs",
+    description: "Long-horizon agent research lab",
+    type: "Existing Client",
+    tags: ["Churn Risk"],
+    contactName: "Marcus Chen",
+    contactRole: "VP Research Operations",
+    contractValue: 1_800_000,
+  },
+  {
+    id: "synthos",
+    name: "Synthos",
+    description: "Multimodal video understanding models",
+    type: "Existing Client",
+    tags: ["Expansion Opportunity"],
+    contactName: "Elena Volkov",
+    contactRole: "Director of Model Training",
+    contractValue: 950_000,
+  },
+  {
+    id: "arclight",
+    name: "Arclight AI",
+    description: "Frontier reasoning models for code and math",
+    type: "Existing Client",
+    tags: ["Churn Risk", "Expansion Opportunity"],
+    contactName: "James O'Sullivan",
+    contactRole: "Head of Post-Training",
+    contractValue: 3_100_000,
+  },
+  {
+    id: "vanta",
+    name: "Vanta Research",
+    description: "Open-weight model lab with focus on alignment",
+    type: "Existing Client",
+    tags: ["Expansion Opportunity"],
+    contactName: "Aisha Patel",
+    contactRole: "Data Lead",
+    contractValue: 620_000,
+  },
+  {
+    id: "quantum",
+    name: "Quantum Minds",
+    description: "Stealth-mode AGI lab, Series B",
+    type: "Prospect",
+    tags: ["New Opportunity"],
+    contactName: "Daniel Reyes",
+    contactRole: "Co-founder & CTO",
+  },
+  {
+    id: "orbital",
+    name: "Orbital ML",
+    description: "Robotics foundation models for warehouse automation",
+    type: "Prospect",
+    tags: ["New Opportunity"],
+    contactName: "Sophia Lindqvist",
+    contactRole: "VP Engineering",
+  },
+  {
+    id: "stratos",
+    name: "Stratos AI",
+    description: "Defense-focused multimodal intelligence platform",
+    type: "Prospect",
+    tags: ["New Opportunity"],
+    contactName: "Col. Robert Hayes (ret.)",
+    contactRole: "Chief AI Officer",
+  },
+  {
+    id: "deepform",
+    name: "Deepform",
+    description: "Generative protein design models",
+    type: "Prospect",
+    tags: ["New Opportunity"],
+    contactName: "Dr. Yuki Tanaka",
+    contactRole: "Head of ML",
+  },
+  {
+    id: "nexus",
+    name: "Nexus Intelligence",
+    description: "Enterprise AI agents for financial services",
+    type: "Prospect",
+    tags: ["New Opportunity"],
+    contactName: "Olivia Brennan",
+    contactRole: "SVP Product",
+  },
+];
+
+let sid = 0;
+const s = (data: Omit<Signal, "id">): Signal => ({ id: `s${++sid}`, ...data });
+
+export const signals: Signal[] = [
+  // Helix AI — existing, expansion
+  s({ accountId: "helix", type: "Funding", source: "TechCrunch", timestamp: daysAgo(2),
+     description: "Helix AI closed a $400M Series C led by Founders Fund to scale wet-lab data acquisition and model training.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "helix", type: "Hiring", source: "Job Board", timestamp: daysAgo(5),
+     description: "Posted 12 new roles for biology data annotators and a Director of Training Data — clear capacity gap.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "helix", type: "Research", source: "bioRxiv", timestamp: daysAgo(11),
+     description: "Published paper on protein-folding reasoning benchmarks where their model trails Anthropic by 8 pts.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "helix", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(3),
+     description: "Weekly task throughput up 38% — pipeline approaching contracted ceiling on the bio-reasoning workstream.",
+     classification: "Opportunity", urgency: "High" }),
+
+  // Meridian — churn risk
+  s({ accountId: "meridian", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(1),
+     description: "TAT on agent trajectory eval batches degraded from 3.2 → 6.8 days over last 3 weeks. Batch rejection rate at 14%.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "meridian", type: "Relationship", source: "LinkedIn", timestamp: daysAgo(7),
+     description: "Champion Sarah Kim (former Data Lead) departed to OpenAI. New stakeholder unconfirmed.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "meridian", type: "Relationship", source: "Internal CRM", timestamp: daysAgo(14),
+     description: "Marcus Chen has not responded to last 3 weekly syncs. Slack activity in shared channel dropped to zero.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "meridian", type: "Competitor", source: "The Information", timestamp: daysAgo(9),
+     description: "Scale AI announced expanded agent-trajectory offering with Meridian named as design partner.",
+     classification: "Risk", urgency: "Medium" }),
+
+  // Synthos — expansion
+  s({ accountId: "synthos", type: "Press", source: "Synthos Blog", timestamp: daysAgo(4),
+     description: "Announced Synthos V3 with native long-video understanding (up to 2 hours of context).",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "synthos", type: "Funding", source: "Bloomberg", timestamp: daysAgo(18),
+     description: "Raised $180M Series B extension at $1.6B valuation, doubling training compute budget.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "synthos", type: "Hiring", source: "Job Board", timestamp: daysAgo(8),
+     description: "Hiring 6 video-annotation specialists and a Head of Multimodal Data Operations.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "synthos", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(6),
+     description: "Burn rate on current contract puts them at 100% utilization 7 weeks before renewal.",
+     classification: "Opportunity", urgency: "High" }),
+
+  // Arclight — churn risk + expansion
+  s({ accountId: "arclight", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(2),
+     description: "Code-reasoning workstream stalled — zero new batches submitted in 11 days after running at 200/week.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "arclight", type: "Press", source: "Arclight Blog", timestamp: daysAgo(6),
+     description: "Released Arclight-R2, a new reasoning model topping LiveCodeBench. Math reasoning still 12 pts behind GPT-5.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "arclight", type: "Hiring", source: "LinkedIn", timestamp: daysAgo(10),
+     description: "Posted Head of Math Reasoning Data role — signals upcoming math-focused training run.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "arclight", type: "Relationship", source: "Internal CRM", timestamp: daysAgo(13),
+     description: "New stakeholder, Priya Anand (Director of Eval), added to account from buyer side.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "arclight", type: "Competitor", source: "TechCrunch", timestamp: daysAgo(20),
+     description: "Surge AI announced new code-reasoning data product with case study from rival lab.",
+     classification: "Risk", urgency: "Medium" }),
+
+  // Vanta — expansion
+  s({ accountId: "vanta", type: "Research", source: "arXiv", timestamp: daysAgo(5),
+     description: "Published RLHF paper noting bottleneck in human preference data quality for safety-critical prompts.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "vanta", type: "Funding", source: "Forbes", timestamp: daysAgo(22),
+     description: "Closed $75M from OSS-friendly investors, earmarked partially for alignment data partnerships.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "vanta", type: "Hiring", source: "Job Board", timestamp: daysAgo(9),
+     description: "Opened 4 roles for red-team data engineers and safety-eval specialists.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Quantum Minds — prospect
+  s({ accountId: "quantum", type: "Funding", source: "TechCrunch", timestamp: daysAgo(3),
+     description: "Emerged from stealth with $220M Series B from Sequoia + a16z. Mission: long-horizon planning agents.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "quantum", type: "Hiring", source: "LinkedIn", timestamp: daysAgo(6),
+     description: "Posted Head of Training Data and 8 ML engineer roles — building data org from scratch.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "quantum", type: "Research", source: "arXiv", timestamp: daysAgo(15),
+     description: "CTO Daniel Reyes published preprint on agent trajectory eval — a known AfterQuery strength.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Orbital ML — prospect
+  s({ accountId: "orbital", type: "Funding", source: "The Information", timestamp: daysAgo(7),
+     description: "Raised $90M Series A to build robotics foundation models. Compute partner: CoreWeave.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "orbital", type: "Hiring", source: "Job Board", timestamp: daysAgo(4),
+     description: "Posted 5 roles for teleoperation data ops and a Director of Real-World Data.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "orbital", type: "Press", source: "IEEE Spectrum", timestamp: daysAgo(12),
+     description: "Demo video of warehouse robot fleet went viral — internal pressure to ship v2 fast.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "orbital", type: "Competitor", source: "TechCrunch", timestamp: daysAgo(19),
+     description: "Physical Intelligence announced partnership with Scale for robotics data labeling.",
+     classification: "Risk", urgency: "Medium" }),
+
+  // Stratos AI — prospect
+  s({ accountId: "stratos", type: "Press", source: "Defense News", timestamp: daysAgo(5),
+     description: "Awarded $120M DoD contract for multimodal ISR intelligence platform — must ship in 9 months.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "stratos", type: "Hiring", source: "ClearanceJobs", timestamp: daysAgo(8),
+     description: "Hiring TS/SCI-cleared annotators and a Director of Secure Data Operations.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "stratos", type: "Funding", source: "Bloomberg", timestamp: daysAgo(25),
+     description: "Closed $150M Series B led by Founders Fund and In-Q-Tel.",
+     classification: "Opportunity", urgency: "Low" }),
+
+  // Deepform — prospect
+  s({ accountId: "deepform", type: "Research", source: "Nature Biotechnology", timestamp: daysAgo(4),
+     description: "Published SOTA results on protein binder design — bottleneck cited: wet-lab validation throughput.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "deepform", type: "Funding", source: "Endpoints News", timestamp: daysAgo(10),
+     description: "Series A extension of $60M led by ARCH Venture Partners.",
+     classification: "Opportunity", urgency: "Medium" }),
+  s({ accountId: "deepform", type: "Hiring", source: "LinkedIn", timestamp: daysAgo(13),
+     description: "Hiring Head of ML Data and 3 computational biologist annotator roles.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Nexus Intelligence — prospect
+  s({ accountId: "nexus", type: "Press", source: "Reuters", timestamp: daysAgo(6),
+     description: "Launched enterprise finance-agent product with JPMorgan as design partner.",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "nexus", type: "Hiring", source: "Job Board", timestamp: daysAgo(9),
+     description: "Posted Head of Financial Data Annotation and 6 SME annotator roles (CFA/CPA preferred).",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "nexus", type: "Competitor", source: "WSJ", timestamp: daysAgo(16),
+     description: "Hebbia raised $130M to attack the same enterprise finance segment.",
+     classification: "Risk", urgency: "Medium" }),
+  s({ accountId: "nexus", type: "Funding", source: "TechCrunch", timestamp: daysAgo(28),
+     description: "Closed $50M Series A from Bain Capital Ventures.",
+     classification: "Opportunity", urgency: "Low" }),
+];
