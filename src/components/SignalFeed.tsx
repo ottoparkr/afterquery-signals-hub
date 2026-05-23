@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Zap, TrendingUp, DollarSign, Check, Brain } from "lucide-react";
+import { Zap, TrendingUp, DollarSign, Check } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
 
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
@@ -85,15 +85,17 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
       {/* Header */}
       <div className="px-6 py-5 border-b border-border">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-lg font-semibold tracking-tight">{account.name}</h1>
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-lg font-semibold tracking-tight truncate">{account.name}</h1>
             <button
               onClick={onOpenIntel}
-              className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md border border-border text-muted-foreground hover:border-amber-400/60 hover:text-amber-400 transition-colors"
+              className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-md border border-amber-400/70 bg-[#101a2e] text-amber-300 hover:bg-[#152138] hover:border-amber-400 transition-colors"
             >
-              <Brain className="size-3" />
+              <span className="text-sm leading-none">🧠</span>
               Intel
             </button>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap mt-2">
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
               account.type === "Existing Client"
                 ? "bg-opportunity/15 text-opportunity"
@@ -109,11 +111,12 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
               </span>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground mt-1">{account.description}</p>
+          <p className="text-sm text-muted-foreground mt-2">{account.description}</p>
           <p className="text-xs text-muted-foreground mt-1">
             <span className="text-foreground">{account.contactName}</span> · {account.contactRole}
           </p>
         </div>
+
 
 
         {/* Stats */}

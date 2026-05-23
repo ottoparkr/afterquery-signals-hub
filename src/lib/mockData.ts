@@ -278,4 +278,102 @@ export const signals: Signal[] = [
   s({ accountId: "nexus", type: "Funding", source: "TechCrunch", timestamp: daysAgo(28),
      description: "Closed $50M Series A from Bain Capital Ventures.",
      classification: "Opportunity", urgency: "Low" }),
+
+  // ===== Relationship signals surfaced from connected integrations =====
+
+  // Helix AI
+  s({ accountId: "helix", type: "Relationship", source: "Gmail", timestamp: daysAgo(3),
+     description: "Priya's average email response time has increased from 4 hours to 31 hours over the last 3 weeks. Last two check-in meeting invites were declined without a reschedule.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "helix", type: "Relationship", source: "Gong", timestamp: daysAgo(6),
+     description: "Call transcript — Marcus to Michael: \"I don't know why we keep getting batches that fail on Rust ownership patterns. This is the third time. At some point this becomes a vendor problem, not a feedback problem.\"",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "helix", type: "Relationship", source: "Fireflies", timestamp: daysAgo(12),
+     description: "Meeting notes from Dani's onboarding sync: \"Dani asked whether AfterQuery had experience with adversarial eval construction. No AfterQuery rep was present in this meeting.\"",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Meridian
+  s({ accountId: "meridian", type: "Relationship", source: "Gmail", timestamp: daysAgo(4),
+     description: "Marcus's last three replies were one-line acknowledgements with no forward motion. Forwarded our QBR deck internally to an unknown distribution list without comment.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "meridian", type: "Relationship", source: "Gong", timestamp: daysAgo(10),
+     description: "Call transcript — Marcus on internal sync (recorded via Gong integration on their side): \"Honestly, the agent eval pipeline has been more drag than lift. We should be evaluating whether to bring this in-house.\"",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "meridian", type: "Relationship", source: "Fireflies", timestamp: daysAgo(8),
+     description: "Notes from a Meridian eng all-hands: a new Director of Eval Infra, Rachel Tan, introduced herself as \"owning all third-party data partnerships going forward.\" Not yet on our distribution list.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Synthos
+  s({ accountId: "synthos", type: "Relationship", source: "Gong", timestamp: daysAgo(5),
+     description: "Call transcript — Elena to her team: \"AfterQuery is the only vendor who actually understands the long-video annotation problem. We need to lock them in before V3 launch.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "synthos", type: "Relationship", source: "Outlook", timestamp: daysAgo(2),
+     description: "Elena forwarded our last capability deck to Synthos's CFO with the note: \"Worth budgeting for a 2x expansion in Q1.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "synthos", type: "Relationship", source: "Fireflies", timestamp: daysAgo(11),
+     description: "Meeting notes — new stakeholder, Tomás Reyes (Head of Multimodal Data Ops), asked specifically about AfterQuery's video-rater calibration methodology.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Arclight
+  s({ accountId: "arclight", type: "Relationship", source: "Gmail", timestamp: daysAgo(3),
+     description: "James has not opened our last two weekly digest emails. Open rate dropped from 100% to 0% over the past month.",
+     classification: "Risk", urgency: "High" }),
+  s({ accountId: "arclight", type: "Relationship", source: "Gong", timestamp: daysAgo(7),
+     description: "Call transcript — Priya Anand (new Director of Eval) to James: \"I want to talk to AfterQuery directly. From what I've seen, they're ahead of where Surge is on reasoning evals.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "arclight", type: "Relationship", source: "Fireflies", timestamp: daysAgo(14),
+     description: "Meeting notes from Arclight planning sync: \"Math reasoning push starts Q1. Need to identify a data partner with strong SME network in olympiad-level math by end of month.\"",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Vanta
+  s({ accountId: "vanta", type: "Relationship", source: "Gong", timestamp: daysAgo(4),
+     description: "Call transcript — Aisha to her team: \"The safety-eval pilot with AfterQuery is the cleanest data we've gotten. Let's scope a full red-team partnership.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "vanta", type: "Relationship", source: "Gmail", timestamp: daysAgo(9),
+     description: "Aisha looped in their Head of Alignment, Devon Lee, on our last thread with the note: \"Devon — these are the folks I was telling you about.\"",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Quantum Minds
+  s({ accountId: "quantum", type: "Relationship", source: "Fireflies", timestamp: daysAgo(5),
+     description: "Meeting notes from a Quantum Minds founders sync: \"Daniel mentioned AfterQuery by name as a likely first hire on the data side. Wants intros via Sequoia.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "quantum", type: "Relationship", source: "Gmail", timestamp: daysAgo(2),
+     description: "Daniel replied to our cold intro within 14 minutes, asking for a same-week call. \"Trajectory eval is the bottleneck. Let's talk.\"",
+     classification: "Opportunity", urgency: "High" }),
+
+  // Orbital ML
+  s({ accountId: "orbital", type: "Relationship", source: "Gong", timestamp: daysAgo(6),
+     description: "Call transcript — Sophia to her engineering lead: \"The Scale + Physical Intelligence deal worries me. We need a differentiated data partner. Look at AfterQuery and one other.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "orbital", type: "Relationship", source: "Outlook", timestamp: daysAgo(3),
+     description: "Sophia accepted our intro call within 2 hours and added their new Director of Real-World Data to the invite.",
+     classification: "Opportunity", urgency: "High" }),
+
+  // Stratos AI
+  s({ accountId: "stratos", type: "Relationship", source: "Gmail", timestamp: daysAgo(4),
+     description: "Col. Hayes replied to our outreach: \"TS/SCI annotator capacity is the gating factor for our DoD timeline. Send your cleared-staff overview by Friday.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "stratos", type: "Relationship", source: "Fireflies", timestamp: daysAgo(10),
+     description: "Meeting notes from a Stratos program review: \"Two vendors shortlisted for the ISR data partnership. AfterQuery is one. Decision in 4 weeks.\"",
+     classification: "Opportunity", urgency: "High" }),
+
+  // Deepform
+  s({ accountId: "deepform", type: "Relationship", source: "Gong", timestamp: daysAgo(7),
+     description: "Call transcript — Dr. Tanaka to a collaborator: \"For protein binder validation we need annotators with actual wet-lab intuition, not just MTurkers. AfterQuery claims they have that bench.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "deepform", type: "Relationship", source: "Gmail", timestamp: daysAgo(3),
+     description: "Dr. Tanaka asked for a sample annotation pack on three protein design tasks. Wants to evaluate quality before any commercial conversation.",
+     classification: "Opportunity", urgency: "Medium" }),
+
+  // Nexus Intelligence
+  s({ accountId: "nexus", type: "Relationship", source: "Outlook", timestamp: daysAgo(2),
+     description: "Olivia forwarded our capabilities one-pager to JPMorgan's design partner lead with the note: \"This is the team I want running our SME annotation workflow.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "nexus", type: "Relationship", source: "Gong", timestamp: daysAgo(8),
+     description: "Call transcript — Olivia to her product team: \"We can't compete with Hebbia on speed unless our financial eval data is sharper. AfterQuery's CFA-credentialed pool is the differentiator.\"",
+     classification: "Opportunity", urgency: "High" }),
+  s({ accountId: "nexus", type: "Relationship", source: "Fireflies", timestamp: daysAgo(13),
+     description: "Meeting notes — new SVP Engineering, Raj Mehta, joined the Nexus side of the table. Asked who their current annotation vendor was. Olivia answered: \"AfterQuery, and we want to expand.\"",
+     classification: "Opportunity", urgency: "Medium" }),
 ];
+
