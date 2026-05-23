@@ -103,7 +103,13 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
 
         <Section icon={<Mail className="size-3.5 text-primary" />} title="Draft email">
           <div className="space-y-2">
-            <div className="text-[11px] text-muted-foreground">Subject</div>
+            <div className="text-[11px] text-muted-foreground">To</div>
+            <input
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="w-full bg-transparent text-sm text-foreground/90 border-0 border-b border-transparent focus:border-primary/60 focus:outline-none px-0 py-1"
+            />
+            <div className="text-[11px] text-muted-foreground pt-2">Subject</div>
             <input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
