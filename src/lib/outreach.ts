@@ -81,7 +81,7 @@ const BODY_TEMPLATES: Record<SignalType, (a: Account, s: Signal) => string> = {
 
 Saw the news — congrats on the raise. Funding rounds at your stage usually translate into an immediate sprint on training data throughput, and that's exactly where AfterQuery plugs in.
 
-Specifically on the signal we picked up (${s.description.toLowerCase()}), we've spun up SME-vetted annotator pods for 3 frontier labs inside 14 days. Happy to share what that ramp looked like and what it could mean for ${a.name}'s next model release.
+Specifically on the signal we picked up (${s.description}), we've spun up SME-vetted annotator pods for 3 frontier labs inside 14 days. Happy to share what that ramp looked like and what it could mean for ${a.name}'s next model release.
 
 Worth a 20-minute chat next week?
 
@@ -93,7 +93,7 @@ AfterQuery`,
 
 Big congrats on the launch — really impressive work from the ${a.name} team.
 
-Launches like this usually trigger a wave of v-next data + eval needs. We've helped frontier labs build post-launch eval suites with domain SMEs so they can see where the next version breaks before users do. Given ${s.description.toLowerCase().replace(/\.$/, "")}, this felt like a natural moment to reach out.
+Launches like this usually trigger a wave of v-next data + eval needs. We've helped frontier labs build post-launch eval suites with domain SMEs so they can see where the next version breaks before users do. Given ${s.description.replace(/\.$/, "")}, this felt like a natural moment to reach out.
 
 Open to a quick 20 min next week?
 
@@ -105,7 +105,7 @@ AfterQuery`,
 
 Just read the recent paper out of ${a.name} — strong work, particularly on the eval methodology.
 
-One thing stood out: ${s.description.toLowerCase()} That's the exact wedge AfterQuery is built for — PhD-grade SMEs producing reasoning traces and preference data tuned to your domain. We could put together a small pilot dataset matched to the benchmark in question.
+One thing stood out: ${s.description} That's the exact wedge AfterQuery is built for — PhD-grade SMEs producing reasoning traces and preference data tuned to your domain. We could put together a small pilot dataset matched to the benchmark in question.
 
 Worth a 20-min walkthrough?
 
@@ -115,7 +115,7 @@ AfterQuery`,
   Hiring: (a, s) =>
     `Hi ${firstName(a.contactName)},
 
-Noticed ${a.name} is hiring across the data org (${s.description.toLowerCase().replace(/\.$/, "")}). Building that internally is a 6-month exercise; AfterQuery typically stands up an instrumented pod inside two weeks so your incoming Head of Data can focus on strategy instead of ops.
+Noticed ${a.name} is hiring across the data org (${s.description.replace(/\.$/, "")}). Building that internally is a 6-month exercise; AfterQuery typically stands up an instrumented pod inside two weeks so your incoming Head of Data can focus on strategy instead of ops.
 
 Happy to share how we've done this with similar labs. 20 minutes next week?
 
@@ -125,7 +125,7 @@ AfterQuery`,
   Usage: (a, s) =>
     `Hi ${firstName(a.contactName)},
 
-Wanted to flag what we're seeing on the ${a.name} workstream: ${s.description.toLowerCase()}
+Wanted to flag what we're seeing on the ${a.name} workstream: ${s.description}
 
 I'd like to walk you through a concrete remediation plan and, separately, a couple of adjacent workstreams where we think we can move the needle. Can we grab 30 minutes this week?
 
@@ -145,7 +145,7 @@ AfterQuery`,
   Competitor: (a, s) =>
     `Hi ${firstName(a.contactName)},
 
-You probably saw this already — ${s.description.toLowerCase()} Wanted to reach out proactively.
+You probably saw this already — ${s.description} Wanted to reach out proactively.
 
 We've run head-to-head data-quality benchmarks for labs in similar situations and have a clear point of view on where AfterQuery's SME pools differentiate (and where we'd recommend you double down). Happy to share the benchmark methodology + initial read.
 
