@@ -16,6 +16,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     ? generateOutreach(account, signal)
     : generateAccountOutreach(account, accountSignals);
 
+  const [to, setTo] = useState(account.contactEmail);
   const [subject, setSubject] = useState(base?.emailSubject ?? "");
   const [body, setBody] = useState(base?.emailBody ?? "");
   const [points, setPoints] = useState<string[]>(base?.talkingPoints ?? []);
