@@ -236,32 +236,16 @@ function SignalCard({
   };
 
   return (
-    <article className={`group relative rounded-lg border bg-surface px-4 py-3 transition-colors ${
+    <article className={`rounded-lg border bg-surface px-4 py-3 transition-colors ${
       active ? "border-primary/60 bg-surface-hover"
         : selected ? "border-amber-400/60 bg-surface-hover"
         : "border-border hover:border-border/80 hover:bg-surface-hover/50"
     }`}>
-      {/* Selection checkbox (top-left) — visible on hover or when selected */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleSelect();
-        }}
-        aria-label={selected ? "Deselect signal" : "Select signal"}
-        className={`absolute top-2 left-2 z-10 size-4 rounded border flex items-center justify-center transition-opacity ${
-          selected
-            ? "opacity-100 bg-amber-400 border-amber-400 text-zinc-900"
-            : "opacity-0 group-hover:opacity-100 bg-background border-border hover:border-amber-400/60"
-        }`}
-      >
-        {selected && <Check className="size-3" strokeWidth={3} />}
-      </button>
-
       <div className="flex items-start gap-3">
         <div className="size-9 rounded-md bg-background border border-border flex items-center justify-center text-lg shrink-0">
           {SIGNAL_EMOJI[signal.type]}
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-1">
           <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
             <span className="font-medium text-foreground">{signal.type}</span>
             <span>·</span>
@@ -280,12 +264,28 @@ function SignalCard({
                 {signal.urgency}
               </span>
             </div>
-            <button
-              onClick={onGenerate}
-              className="text-[11px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors"
-            >
-              Outreach ↗
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect();
+                }}
+                aria-label={selected ? "Deselect signal" : "Select signal"}
+                className={`size-4 rounded border flex items-center justify-center transition-colors ${
+                  selected
+                    ? "bg-amber-400 border-amber-400 text-zinc-900"
+                    : "bg-background border-border hover:border-amber-400/60"
+                }`}
+              >
+                {selected && <Check className="size-3" strokeWidth={3} />}
+              </button>
+              <button
+                onClick={onGenerate}
+                className="text-[11px] px-2 py-1 rounded border border-border text-muted-foreground hover:text-primary hover:border-primary/60 transition-colors"
+              >
+                Outreach ↗
+              </button>
+            </div>
           </div>
         </div>
       </div>
