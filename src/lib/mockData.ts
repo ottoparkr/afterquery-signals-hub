@@ -138,7 +138,7 @@ const s = (data: Omit<Signal, "id">): Signal => ({ id: `s${++sid}`, ...data });
 export const signals: Signal[] = [
   // Helix AI — existing, expansion (code-gen)
   s({ accountId: "helix", type: "Funding", source: "TechCrunch", timestamp: daysAgo(2),
-     description: "Helix AI closed a $120M Series B led by Founders Fund to scale code-gen model training and developer tooling.",
+     description: "Helix AI closed a $500M Series B led by Founders Fund to scale code-gen model training and developer tooling.",
      classification: "Opportunity", urgency: "High" }),
   s({ accountId: "helix", type: "Hiring", source: "Job Board", timestamp: daysAgo(5),
      description: "Posted 9 new roles for senior engineer annotators (code review SMEs) and a Lead for RLHF code-review pipelines.",
