@@ -4,6 +4,7 @@ import { Sparkles } from "lucide-react";
 import { AccountSidebar } from "@/components/AccountSidebar";
 import { SignalFeed } from "@/components/SignalFeed";
 import { OutreachPanel } from "@/components/OutreachPanel";
+import { IntelPanel } from "@/components/IntelPanel";
 import { accounts, signals, type Signal } from "@/lib/mockData";
 
 export const Route = createFileRoute("/")({
@@ -19,12 +20,16 @@ export const Route = createFileRoute("/")({
 type OutreachTarget =
   | { kind: "signal"; id: string }
   | { kind: "account" }
-  | { kind: "multi"; ids: string[] }
+  | { kind: "multi"; ids: string[] };
+
+type RightPanel =
+  | { kind: "outreach"; target: OutreachTarget }
+  | { kind: "intel" }
   | null;
 
 function Index() {
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
-  const [outreach, setOutreach] = useState<OutreachTarget>(null);
+  const [panel, setPanel] = useState<RightPanel>(null);
   const [panelClosing, setPanelClosing] = useState(false);
 
   const selected = useMemo(() => accounts.find((a) => a.id === selectedId), [selectedId]);
@@ -33,42 +38,55 @@ function Index() {
     [selectedId]
   );
 
+  const outreachTarget = panel?.kind === "outreach" ? panel.target : null;
   const activeSignal: Signal | undefined =
-    outreach?.kind === "signal" ? signals.find((s) => s.id === outreach.id) : undefined;
+    outreachTarget?.kind === "signal" ? signals.find((s) => s.id === outreachTarget.id) : undefined;
   const multiSignals: Signal[] | undefined =
-    outreach?.kind === "multi"
-      ? outreach.ids
+    outreachTarget?.kind === "multi"
+      ? outreachTarget.ids
           .map((id) => signals.find((s) => s.id === id))
           .filter((s): s is Signal => !!s)
       : undefined;
 
   const handleSelect = (id: string) => {
-    // Toggle: clicking the already-selected account deselects it
     if (id === selectedId) {
       setSelectedId(undefined);
-      setOutreach(null);
+      setPanel(null);
       setPanelClosing(false);
       return;
     }
     setSelectedId(id);
-    setOutreach(null);
+    setPanel(null);
     setPanelClosing(false);
   };
 
-  const handleOpen = (target: Exclude<OutreachTarget, null>) => {
-    setOutreach(target);
-    setPanelClosing(false);
+  const openPanel = (next: Exclude<RightPanel, null>) => {
+    if (panel !== null && panel.kind !== next.kind) {
+      // close current then open new
+      setPanelClosing(true);
+      setTimeout(() => {
+        setPanelClosing(false);
+        setPanel(next);
+      }, 300);
+    } else {
+      setPanel(next);
+      setPanelClosing(false);
+    }
   };
 
-  const handleCloseOutreach = () => {
+  const handleOpenOutreach = (target: OutreachTarget) =>
+    openPanel({ kind: "outreach", target });
+  const handleOpenIntel = () => openPanel({ kind: "intel" });
+
+  const handleClosePanel = () => {
     setPanelClosing(true);
     setTimeout(() => {
       setPanelClosing(false);
-      setOutreach(null);
+      setPanel(null);
     }, 300);
   };
 
-  const showPanel = outreach !== null || panelClosing;
+  const showPanel = panel !== null || panelClosing;
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -84,9 +102,12 @@ function Index() {
             account={selected}
             signals={signals}
             activeSignalId={activeSignal?.id}
-            onGenerate={(s) => handleOpen({ kind: "signal", id: s.id })}
-            onGenerateAccount={() => handleOpen({ kind: "account" })}
-            onGenerateMulti={(sigs) => handleOpen({ kind: "multi", ids: sigs.map((s) => s.id) })}
+            onGenerate={(s) => handleOpenOutreach({ kind: "signal", id: s.id })}
+            onGenerateAccount={() => handleOpenOutreach({ kind: "account" })}
+            onGenerateMulti={(sigs) =>
+              handleOpenOutreach({ kind: "multi", ids: sigs.map((s) => s.id) })
+            }
+            onOpenIntel={handleOpenIntel}
           />
         </div>
       ) : (
@@ -105,14 +126,17 @@ function Index() {
         }`}
       >
         <div className="w-[380px] h-screen border-l border-border bg-surface">
-          {outreach !== null && selected && (
+          {panel?.kind === "outreach" && selected && (
             <OutreachPanel
               account={selected}
               signal={activeSignal}
               multiSignals={multiSignals}
               accountSignals={accountSignals}
-              onClose={handleCloseOutreach}
+              onClose={handleClosePanel}
             />
+          )}
+          {panel?.kind === "intel" && selected && (
+            <IntelPanel account={selected} onClose={handleClosePanel} />
           )}
         </div>
       </div>
