@@ -105,10 +105,14 @@ export function AccountSidebar({ accounts, signals, selectedId, onSelect }: Prop
                   <div className="flex items-center gap-1.5">
                     <div className="text-sm font-medium truncate">{a.name}</div>
                     {high > 0 && (
-                      <span className="text-[10px] px-1.5 rounded bg-[color:var(--urgency-high)]/20 text-[color:var(--urgency-high)] font-semibold">
+                      <span
+                        title={`${high} high urgency signal${high === 1 ? "" : "s"}`}
+                        className="text-[10px] px-1.5 rounded bg-[color:var(--urgency-high)]/20 text-[color:var(--urgency-high)] font-semibold"
+                      >
                         {high}
                       </span>
                     )}
+
                   </div>
                   <div className="flex flex-wrap gap-1 mt-1">
                     <span className={`text-[10px] px-1.5 py-0.5 rounded ${

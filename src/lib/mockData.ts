@@ -37,13 +37,14 @@ export const accounts: Account[] = [
   {
     id: "helix",
     name: "Helix AI",
-    description: "Foundation model lab focused on biological reasoning",
+    description: "Code-gen foundation model lab focused on developer tooling",
     type: "Existing Client",
     tags: ["Expansion Opportunity"],
-    contactName: "Dr. Priya Raman",
-    contactRole: "Head of Data",
-    contractValue: 2_400_000,
+    contactName: "Priya Shah",
+    contactRole: "Head of Post-Training",
+    contractValue: 480_000,
   },
+
   {
     id: "meridian",
     name: "Meridian Labs",
@@ -135,19 +136,20 @@ let sid = 0;
 const s = (data: Omit<Signal, "id">): Signal => ({ id: `s${++sid}`, ...data });
 
 export const signals: Signal[] = [
-  // Helix AI — existing, expansion
+  // Helix AI — existing, expansion (code-gen)
   s({ accountId: "helix", type: "Funding", source: "TechCrunch", timestamp: daysAgo(2),
-     description: "Helix AI closed a $400M Series C led by Founders Fund to scale wet-lab data acquisition and model training.",
+     description: "Helix AI closed a $120M Series B led by Founders Fund to scale code-gen model training and developer tooling.",
      classification: "Opportunity", urgency: "High" }),
   s({ accountId: "helix", type: "Hiring", source: "Job Board", timestamp: daysAgo(5),
-     description: "Posted 12 new roles for biology data annotators and a Director of Training Data — clear capacity gap.",
+     description: "Posted 9 new roles for senior engineer annotators (code review SMEs) and a Lead for RLHF code-review pipelines.",
      classification: "Opportunity", urgency: "High" }),
-  s({ accountId: "helix", type: "Research", source: "bioRxiv", timestamp: daysAgo(11),
-     description: "Published paper on protein-folding reasoning benchmarks where their model trails Anthropic by 8 pts.",
+  s({ accountId: "helix", type: "Research", source: "arXiv", timestamp: daysAgo(11),
+     description: "Published paper on code-completion eval where their model trails Claude on multi-file refactor tasks by 11 pts.",
      classification: "Opportunity", urgency: "Medium" }),
   s({ accountId: "helix", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(3),
-     description: "Weekly task throughput up 38% — pipeline approaching contracted ceiling on the bio-reasoning workstream.",
+     description: "Code review eval workstream throughput up 42% — approaching contracted ceiling on the RLHF-for-code pipeline.",
      classification: "Opportunity", urgency: "High" }),
+
 
   // Meridian — churn risk
   s({ accountId: "meridian", type: "Usage", source: "Internal Usage Data", timestamp: daysAgo(1),

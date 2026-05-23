@@ -19,14 +19,14 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
 
   if (!outreach) {
     return (
-      <aside className="w-[420px] shrink-0 border-l border-border bg-surface h-screen flex items-center justify-center p-6">
+      <aside className="w-[380px] shrink-0 border-l border-border bg-surface h-screen flex items-center justify-center p-6">
         <p className="text-sm text-muted-foreground text-center">No signals to draft outreach from.</p>
       </aside>
     );
   }
 
   return (
-    <aside key={seed} className="w-[420px] shrink-0 border-l border-border bg-surface h-screen flex flex-col">
+    <aside key={seed} className="w-[380px] shrink-0 border-l border-border bg-surface h-screen flex flex-col">
       <div className="px-5 py-4 border-b border-border flex items-center justify-between">
         <div>
           <div className="text-xs text-muted-foreground">Outreach for</div>
