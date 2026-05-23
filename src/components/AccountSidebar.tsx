@@ -9,7 +9,7 @@ const FILTERS: Filter[] = ["All", "Existing", "Prospect", "Churn Risk", "Expansi
 interface Props {
   accounts: Account[];
   signals: Signal[];
-  selectedId: string;
+  selectedId?: string;
   onSelect: (id: string) => void;
 }
 
