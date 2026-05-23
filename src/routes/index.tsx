@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { Sparkles } from "lucide-react";
 import { AccountSidebar } from "@/components/AccountSidebar";
 import { SignalFeed } from "@/components/SignalFeed";
 import { OutreachPanel } from "@/components/OutreachPanel";
