@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { AccountSidebar } from "@/components/AccountSidebar";
 import { SignalFeed } from "@/components/SignalFeed";
@@ -88,8 +88,17 @@ function Index() {
 
   const showPanel = panel !== null || panelClosing;
 
+  // Overlay panel when viewport is too narrow to fit sidebar (288) + middle min (400) + panel (380) = 1068
+  const [overlay, setOverlay] = useState(false);
+  useEffect(() => {
+    const check = () => setOverlay(window.innerWidth < 1068);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden relative">
       <AccountSidebar
         accounts={accounts}
         signals={signals}
@@ -97,7 +106,7 @@ function Index() {
         onSelect={handleSelect}
       />
       {selected ? (
-        <div className="flex-1 min-w-0 animate-fade-in" style={{ animationDuration: "150ms" }}>
+        <div className="flex-1 min-w-[400px] animate-fade-in" style={{ animationDuration: "150ms" }}>
           <SignalFeed
             account={selected}
             signals={signals}
@@ -121,9 +130,15 @@ function Index() {
       )}
 
       <div
-        className={`shrink-0 overflow-hidden transition-all duration-300 ease-out ${
-          showPanel ? "max-w-[380px]" : "max-w-[0px]"
-        }`}
+        className={
+          overlay
+            ? `absolute top-0 right-0 h-screen z-30 shadow-2xl transition-transform duration-300 ease-out ${
+                showPanel ? "translate-x-0" : "translate-x-full"
+              }`
+            : `shrink-0 overflow-hidden transition-all duration-300 ease-out ${
+                showPanel ? "max-w-[380px]" : "max-w-[0px]"
+              }`
+        }
       >
         <div className="w-[380px] h-screen border-l border-border bg-surface">
           {panel?.kind === "outreach" && selected && (
@@ -143,3 +158,4 @@ function Index() {
     </div>
   );
 }
+
