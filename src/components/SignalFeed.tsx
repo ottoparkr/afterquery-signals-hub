@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Zap, TrendingUp, DollarSign, X } from "lucide-react";
+import { Zap, TrendingUp, DollarSign, Check } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
 
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
