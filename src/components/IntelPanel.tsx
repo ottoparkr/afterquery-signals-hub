@@ -91,32 +91,44 @@ export function IntelPanel({ account, onClose }: Props) {
             Connect data sources
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Enrich POC profiles automatically by connecting your tools.
+            POC profiles are automatically enriched from your connected tools.
           </p>
-          <div className="grid grid-cols-1 gap-1.5 pt-1">
-            {INTEGRATIONS.map((i) => (
-              <div
-                key={i.name}
-                className="flex items-center justify-between rounded-md border border-border bg-background px-3 py-2 transition-colors hover:bg-surface-hover"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">{i.emoji}</span>
-                  <span className="text-xs font-medium text-foreground">{i.name}</span>
-                </div>
-                <button
-                  onClick={handleConnect}
-                  className="text-[10px] px-2 py-0.5 rounded border border-amber-400/60 text-amber-400 hover:bg-amber-400/10 transition-colors"
-                >
-                  Connect
-                </button>
-              </div>
-            ))}
-          </div>
+          <TooltipProvider delayDuration={100}>
+            <div className="grid grid-cols-1 gap-1.5 pt-1">
+              {INTEGRATIONS.map((i) => (
+                <Tooltip key={i.name}>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-left transition-colors hover:bg-surface-hover cursor-default"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-sm">{i.emoji}</span>
+                        <div className="min-w-0">
+                          <div className="text-xs font-medium text-foreground">{i.name}</div>
+                          <div className="text-[10px] text-muted-foreground">
+                            Last synced: {i.lastSynced}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="shrink-0 text-[10px] px-2 py-0.5 rounded border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-medium">
+                        Connected ✓
+                      </span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left" className="bg-background text-foreground border border-border">
+                    {i.tooltip}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          </TooltipProvider>
         </section>
       </div>
     </aside>
   );
 }
+
 
 function POCCard({ poc }: { poc: POC }) {
   return (
