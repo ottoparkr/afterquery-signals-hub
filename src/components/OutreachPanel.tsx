@@ -71,7 +71,9 @@ export function OutreachPanel({ account, signal, multiSignals, accountSignals, o
     <aside className="w-[380px] shrink-0 border-l border-border bg-surface h-screen flex flex-col">
       <div className="px-5 py-4 border-b border-border flex items-center justify-between">
         <div>
-          <div className="text-xs text-muted-foreground">Outreach for</div>
+          <div className="text-xs text-muted-foreground">
+            {isMulti ? `Combined outreach · ${multiSignals!.length} signals` : "Outreach for"}
+          </div>
           <div className="text-sm font-semibold">{account.name}</div>
         </div>
         <div className="flex items-center gap-1">
