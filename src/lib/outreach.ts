@@ -256,10 +256,8 @@ export function generateMultiOutreach(account: Account, signals: Signal[]): Outr
   );
   const types = Array.from(new Set(sorted.map((s) => s.type)));
 
-  const angle = `Several recent signals at ${account.name} point in the same direction — ${sorted
-    .map((s) => `${s.type.toLowerCase()} (${s.description.split(".")[0].toLowerCase()})`)
-    .slice(0, 3)
-    .join("; ")}${sorted.length > 3 ? `; and ${sorted.length - 3} more` : ""}. Taken together, this is the moment to lead with a single narrative that ties them into one AfterQuery proposal rather than chasing each thread separately.`;
+  const angle = buildCombinedAngle(account, sorted);
+
 
   const emailSubject = `A few things on our radar for ${account.name}`;
 
