@@ -110,10 +110,11 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
               className="w-full bg-transparent text-sm text-foreground/90 border-0 border-b border-transparent focus:border-primary/60 focus:outline-none px-0 py-1"
             />
             <div className="text-[11px] text-muted-foreground pt-2">Subject</div>
-            <AutoTextarea
+            <input
+              type="text"
               value={subject}
-              onChange={setSubject}
-              className="w-full bg-transparent text-sm font-semibold text-foreground border-0 border-b border-transparent focus:border-primary/60 focus:outline-none px-0 py-1 resize-none whitespace-normal break-words"
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full bg-transparent text-sm font-semibold text-foreground border-0 border-b border-transparent focus:border-primary/60 focus:outline-none px-0 py-1"
             />
 
             <div className="text-[11px] text-muted-foreground pt-2">Body</div>
