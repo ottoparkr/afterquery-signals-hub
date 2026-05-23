@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [selectedId, setSelectedId] = useState(accounts[0].id);
-  const [outreachSignalId, setOutreachSignalId] = useState<string | "account" | null>(null);
+  const [outreachSignalId, setOutreachSignalId] = useState<string | "account" | null>("account");
 
   const selected = useMemo(() => accounts.find((a) => a.id === selectedId)!, [selectedId]);
   const accountSignals = useMemo(() => signals.filter((s) => s.accountId === selectedId), [selectedId]);
@@ -33,7 +33,7 @@ function Index() {
         selectedId={selectedId}
         onSelect={(id) => {
           setSelectedId(id);
-          setOutreachSignalId(null);
+          setOutreachSignalId("account");
         }}
       />
       <SignalFeed
