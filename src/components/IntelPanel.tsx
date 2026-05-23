@@ -1,8 +1,13 @@
-import { RotateCw, X, Mail, Phone, FileText, FileSignature, HardDrive, Send } from "lucide-react";
+import { RotateCw, X } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import type { Account } from "@/lib/mockData";
 import { accountIntel, type POC, type Sentiment } from "@/lib/accountIntel";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Props {
   account: Account;
@@ -15,22 +20,19 @@ const SENTIMENT_CLASS: Record<Sentiment, string> = {
   Cooling: "bg-amber-500/15 text-amber-400 border-amber-500/30",
 };
 
-const INTEGRATIONS: { name: string; icon: typeof Mail; emoji: string }[] = [
-  { name: "Gmail", icon: Mail, emoji: "📧" },
-  { name: "Gong", icon: Phone, emoji: "📞" },
-  { name: "Fireflies", icon: FileText, emoji: "📝" },
-  { name: "Google Drive", icon: HardDrive, emoji: "📄" },
-  { name: "Outlook", icon: Send, emoji: "✉️" },
-  { name: "DocuSign", icon: FileSignature, emoji: "✍️" },
+const INTEGRATIONS: { name: string; emoji: string; lastSynced: string; tooltip: string }[] = [
+  { name: "Gmail", emoji: "📧", lastSynced: "12 min ago", tooltip: "Syncing emails, threads, and contact activity" },
+  { name: "Gong", emoji: "📞", lastSynced: "3 hours ago", tooltip: "Syncing call recordings and transcripts" },
+  { name: "Fireflies", emoji: "📝", lastSynced: "1 hour ago", tooltip: "Syncing meeting notes and summaries" },
+  { name: "Google Drive", emoji: "📄", lastSynced: "45 min ago", tooltip: "Syncing shared files and meeting decks" },
+  { name: "Outlook", emoji: "✉️", lastSynced: "28 min ago", tooltip: "Syncing calendar and email threads" },
+  { name: "DocuSign", emoji: "✍️", lastSynced: "6 hours ago", tooltip: "Syncing contracts and signed documents" },
 ];
 
 export function IntelPanel({ account, onClose }: Props) {
   const intel = accountIntel[account.id];
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleConnect = () => {
-    toast("Integrations coming soon — contact your AfterQuery rep to join the beta.");
-  };
 
   return (
     <aside className="w-[380px] shrink-0 border-l border-border bg-surface h-screen flex flex-col">
