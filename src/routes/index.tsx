@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 import { AccountSidebar } from "@/components/AccountSidebar";
 import { SignalFeed } from "@/components/SignalFeed";
 import { OutreachPanel } from "@/components/OutreachPanel";
-import { accounts, signals } from "@/lib/mockData";
+import { accounts, signals, type Signal } from "@/lib/mockData";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,9 +16,15 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+type OutreachTarget =
+  | { kind: "signal"; id: string }
+  | { kind: "account" }
+  | { kind: "multi"; ids: string[] }
+  | null;
+
 function Index() {
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
-  const [outreachSignalId, setOutreachSignalId] = useState<string | "account" | null>(null);
+  const [outreach, setOutreach] = useState<OutreachTarget>(null);
   const [panelClosing, setPanelClosing] = useState(false);
 
   const selected = useMemo(() => accounts.find((a) => a.id === selectedId), [selectedId]);
@@ -26,18 +32,31 @@ function Index() {
     () => (selectedId ? signals.filter((s) => s.accountId === selectedId) : []),
     [selectedId]
   );
-  const activeSignal = outreachSignalId && outreachSignalId !== "account"
-    ? signals.find((s) => s.id === outreachSignalId)
-    : undefined;
+
+  const activeSignal: Signal | undefined =
+    outreach?.kind === "signal" ? signals.find((s) => s.id === outreach.id) : undefined;
+  const multiSignals: Signal[] | undefined =
+    outreach?.kind === "multi"
+      ? outreach.ids
+          .map((id) => signals.find((s) => s.id === id))
+          .filter((s): s is Signal => !!s)
+      : undefined;
 
   const handleSelect = (id: string) => {
+    // Toggle: clicking the already-selected account deselects it
+    if (id === selectedId) {
+      setSelectedId(undefined);
+      setOutreach(null);
+      setPanelClosing(false);
+      return;
+    }
     setSelectedId(id);
-    setOutreachSignalId(null);
+    setOutreach(null);
     setPanelClosing(false);
   };
 
-  const handleOpenOutreach = (id: string | "account") => {
-    setOutreachSignalId(id);
+  const handleOpen = (target: Exclude<OutreachTarget, null>) => {
+    setOutreach(target);
     setPanelClosing(false);
   };
 
@@ -45,11 +64,11 @@ function Index() {
     setPanelClosing(true);
     setTimeout(() => {
       setPanelClosing(false);
-      setOutreachSignalId(null);
+      setOutreach(null);
     }, 300);
   };
 
-  const showPanel = outreachSignalId !== null || panelClosing;
+  const showPanel = outreach !== null || panelClosing;
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -65,8 +84,9 @@ function Index() {
             account={selected}
             signals={signals}
             activeSignalId={activeSignal?.id}
-            onGenerate={(s) => handleOpenOutreach(s.id)}
-            onGenerateAccount={() => handleOpenOutreach("account")}
+            onGenerate={(s) => handleOpen({ kind: "signal", id: s.id })}
+            onGenerateAccount={() => handleOpen({ kind: "account" })}
+            onGenerateMulti={(sigs) => handleOpen({ kind: "multi", ids: sigs.map((s) => s.id) })}
           />
         </div>
       ) : (
@@ -85,10 +105,11 @@ function Index() {
         }`}
       >
         <div className="w-[380px] h-screen border-l border-border bg-surface">
-          {outreachSignalId !== null && selected && (
+          {outreach !== null && selected && (
             <OutreachPanel
               account={selected}
               signal={activeSignal}
+              multiSignals={multiSignals}
               accountSignals={accountSignals}
               onClose={handleCloseOutreach}
             />

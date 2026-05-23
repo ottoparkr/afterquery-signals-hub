@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Zap, TrendingUp, DollarSign } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Zap, TrendingUp, DollarSign, X } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
 
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
@@ -9,15 +9,34 @@ interface Props {
   signals: Signal[];
   onGenerate: (signal: Signal) => void;
   onGenerateAccount: () => void;
+  onGenerateMulti: (signals: Signal[]) => void;
   activeSignalId?: string;
 }
 
 const SIGNAL_TYPES: SignalType[] = ["Funding", "Press", "Research", "Hiring", "Usage", "Relationship", "Competitor"];
 
 type FeedFilter = "All" | "Risk" | "Opportunity" | SignalType;
+type TimeWindow = "Today" | "7D" | "30D" | "90D" | "All";
 
-export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, activeSignalId }: Props) {
+const TIME_WINDOWS: TimeWindow[] = ["Today", "7D", "30D", "90D", "All"];
+
+const WINDOW_MS: Record<TimeWindow, number | null> = {
+  Today: 1 * 24 * 60 * 60 * 1000,
+  "7D": 7 * 24 * 60 * 60 * 1000,
+  "30D": 30 * 24 * 60 * 60 * 1000,
+  "90D": 90 * 24 * 60 * 60 * 1000,
+  All: null,
+};
+
+export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, activeSignalId }: Props) {
   const [filter, setFilter] = useState<FeedFilter>("All");
+  const [timeWindow, setTimeWindow] = useState<TimeWindow>("30D");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  // Reset selection when account changes
+  useEffect(() => {
+    setSelected(new Set());
+  }, [account.id]);
 
   const accountSignals = useMemo(
     () =>
@@ -29,17 +48,39 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
 
   const highCount = accountSignals.filter((s) => s.urgency === "High").length;
 
+  const windowFiltered = useMemo(() => {
+    const ms = WINDOW_MS[timeWindow];
+    if (ms === null) return accountSignals;
+    const cutoff = Date.now() - ms;
+    return accountSignals.filter((s) => new Date(s.timestamp).getTime() >= cutoff);
+  }, [accountSignals, timeWindow]);
+
   const visible = useMemo(() => {
-    if (filter === "All") return accountSignals;
+    if (filter === "All") return windowFiltered;
     if (filter === "Risk" || filter === "Opportunity")
-      return accountSignals.filter((s) => s.classification === filter);
-    return accountSignals.filter((s) => s.type === filter);
-  }, [accountSignals, filter]);
+      return windowFiltered.filter((s) => s.classification === filter);
+    return windowFiltered.filter((s) => s.type === filter);
+  }, [windowFiltered, filter]);
 
   const filters: FeedFilter[] = ["All", "Risk", "Opportunity", ...SIGNAL_TYPES];
 
+  const toggle = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const clearSelection = () => setSelected(new Set());
+
+  const selectedSignals = useMemo(
+    () => accountSignals.filter((s) => selected.has(s.id)),
+    [accountSignals, selected]
+  );
+
   return (
-    <section className="flex-1 flex flex-col min-w-0 h-screen bg-background overflow-x-hidden">
+    <section className="flex-1 flex flex-col min-w-0 h-screen bg-background overflow-x-hidden relative">
       {/* Header */}
       <div className="px-6 py-5 border-b border-border">
         <div className="min-w-0">
@@ -77,8 +118,26 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
         </div>
       </div>
 
+      {/* Time window segmented control */}
+      <div className="px-6 pt-3 flex items-center gap-1 overflow-x-hidden">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground mr-2">Window</span>
+        {TIME_WINDOWS.map((w) => (
+          <button
+            key={w}
+            onClick={() => setTimeWindow(w)}
+            className={`text-[11px] px-2.5 py-1 rounded-md border transition-colors ${
+              timeWindow === w
+                ? "bg-amber-400 text-zinc-900 border-amber-400"
+                : "bg-transparent text-muted-foreground border-border hover:text-foreground hover:bg-surface"
+            }`}
+          >
+            {w}
+          </button>
+        ))}
+      </div>
+
       {/* Filter bar */}
-      <div className="px-6 py-3 border-b border-border flex flex-wrap gap-1 overflow-x-hidden">
+      <div className="px-6 py-3 border-b border-border flex flex-wrap gap-1 overflow-x-hidden mt-2">
         {filters.map((f) => (
           <button
             key={f}
@@ -98,19 +157,48 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateAccount, ac
       </div>
 
       {/* Feed */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+      <div className={`flex-1 overflow-y-auto px-6 py-4 space-y-3 ${selected.size >= 2 ? "pb-20" : ""}`}>
         {visible.length === 0 && (
-          <div className="text-center text-sm text-muted-foreground py-12">No signals match this filter.</div>
+          <div className="text-center text-sm text-muted-foreground py-12">
+            {accountSignals.length === 0
+              ? "No signals match this filter."
+              : windowFiltered.length === 0
+              ? "No signals in this time period."
+              : "No signals match this filter."}
+          </div>
         )}
         {visible.map((sig) => (
           <SignalCard
             key={sig.id}
             signal={sig}
             active={sig.id === activeSignalId}
+            selected={selected.has(sig.id)}
+            onToggleSelect={() => toggle(sig.id)}
             onGenerate={() => onGenerate(sig)}
           />
         ))}
       </div>
+
+      {/* Multi-selection sticky bar */}
+      {selected.size >= 2 && (
+        <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-surface/95 backdrop-blur px-6 py-3 flex items-center justify-between gap-3 animate-fade-in" style={{ animationDuration: "150ms" }}>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="font-medium">{selected.size} signals selected</span>
+            <button
+              onClick={clearSelection}
+              className="text-xs text-muted-foreground hover:text-foreground underline-offset-2 hover:underline"
+            >
+              Clear
+            </button>
+          </div>
+          <button
+            onClick={() => onGenerateMulti(selectedSignals)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-md bg-amber-400 text-zinc-900 hover:bg-amber-300 transition-colors"
+          >
+            Generate combined outreach ↗
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -129,16 +217,43 @@ function Stat({ icon: Icon, label, value, tone }: { icon: typeof Zap; label: str
   );
 }
 
-function SignalCard({ signal, active, onGenerate }: { signal: Signal; active: boolean; onGenerate: () => void }) {
+function SignalCard({
+  signal,
+  active,
+  selected,
+  onToggleSelect,
+  onGenerate,
+}: {
+  signal: Signal;
+  active: boolean;
+  selected: boolean;
+  onToggleSelect: () => void;
+  onGenerate: () => void;
+}) {
   const classColor: Record<Classification, string> = {
     Risk: "bg-risk/15 text-risk",
     Opportunity: "bg-opportunity/15 text-opportunity",
   };
 
   return (
-    <article className={`group rounded-lg border bg-surface px-4 py-3 transition-colors ${
-      active ? "border-primary/60 bg-surface-hover" : "border-border hover:border-border/80 hover:bg-surface-hover/50"
+    <article className={`group relative rounded-lg border bg-surface px-4 py-3 transition-colors ${
+      active ? "border-primary/60 bg-surface-hover"
+        : selected ? "border-amber-400/60 bg-surface-hover"
+        : "border-border hover:border-border/80 hover:bg-surface-hover/50"
     }`}>
+      {/* Selection checkbox (top-left) — visible on hover or when selected */}
+      <button
+        onClick={onToggleSelect}
+        aria-label={selected ? "Deselect signal" : "Select signal"}
+        className={`absolute top-2 left-2 size-4 rounded border flex items-center justify-center transition-opacity ${
+          selected
+            ? "opacity-100 bg-amber-400 border-amber-400 text-zinc-900"
+            : "opacity-0 group-hover:opacity-100 bg-background border-border hover:border-amber-400/60"
+        }`}
+      >
+        {selected && <X className="size-3" />}
+      </button>
+
       <div className="flex items-start gap-3">
         <div className="size-9 rounded-md bg-background border border-border flex items-center justify-center text-lg shrink-0">
           {SIGNAL_EMOJI[signal.type]}

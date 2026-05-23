@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Copy, Check, RotateCw, Mail, Lightbulb, Target, X, ExternalLink } from "lucide-react";
 import type { Account, Signal } from "@/lib/mockData";
-import { generateOutreach, generateAccountOutreach, type Outreach } from "@/lib/outreach";
+import { generateOutreach, generateAccountOutreach, generateMultiOutreach, type Outreach } from "@/lib/outreach";
 import { SIGNAL_EMOJI } from "@/lib/signalMeta";
 
 interface Props {
   account: Account;
   signal?: Signal;
+  multiSignals?: Signal[];
   accountSignals: Signal[];
   onClose: () => void;
 }
 
-export function OutreachPanel({ account, signal, accountSignals, onClose }: Props) {
-  const base: Outreach | null = signal
+export function OutreachPanel({ account, signal, multiSignals, accountSignals, onClose }: Props) {
+  const isMulti = !!multiSignals && multiSignals.length > 1;
+  const base: Outreach | null = isMulti
+    ? generateMultiOutreach(account, multiSignals!)
+    : signal
     ? generateOutreach(account, signal)
     : generateAccountOutreach(account, accountSignals);
 
@@ -23,7 +27,9 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
   const [copied, setCopied] = useState(false);
 
   // Reset when account/signal changes or regenerate
-  const resetKey = `${account.id}:${signal?.id ?? "account"}`;
+  const resetKey = `${account.id}:${
+    isMulti ? "multi:" + multiSignals!.map((s) => s.id).sort().join(",") : signal?.id ?? "account"
+  }`;
   const lastKey = useRef(resetKey);
   useEffect(() => {
     if (lastKey.current !== resetKey) {
@@ -52,6 +58,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     );
   }
 
+
   const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const handleCopy = () => {
@@ -64,7 +71,9 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
     <aside className="w-[380px] shrink-0 border-l border-border bg-surface h-screen flex flex-col">
       <div className="px-5 py-4 border-b border-border flex items-center justify-between">
         <div>
-          <div className="text-xs text-muted-foreground">Outreach for</div>
+          <div className="text-xs text-muted-foreground">
+            {isMulti ? `Combined outreach · ${multiSignals!.length} signals` : "Outreach for"}
+          </div>
           <div className="text-sm font-semibold">{account.name}</div>
         </div>
         <div className="flex items-center gap-1">
@@ -86,7 +95,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-5">
-        {signal && (
+        {signal && !isMulti && (
           <div className="rounded-md border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5 mb-0.5">
               <span>{SIGNAL_EMOJI[signal.type]}</span>
@@ -96,6 +105,22 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
             <p className="text-foreground/80">{signal.description}</p>
           </div>
         )}
+
+        {isMulti && (
+          <div className="space-y-1.5">
+            {multiSignals!.map((s) => (
+              <div key={s.id} className="rounded-md border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span>{SIGNAL_EMOJI[s.type]}</span>
+                  <span className="font-medium text-foreground">{s.type}</span>
+                  <span>· {s.source}</span>
+                </div>
+                <p className="text-foreground/80">{s.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
 
         <Section icon={<Lightbulb className="size-3.5 text-primary" />} title="Suggested angle">
           <p className="text-sm text-foreground/90 leading-relaxed">{base.angle}</p>
