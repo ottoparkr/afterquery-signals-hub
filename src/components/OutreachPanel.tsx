@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Copy, Check, RotateCw, Mail, Lightbulb, Target, X, ExternalLink } from "lucide-react";
 import type { Account, Signal } from "@/lib/mockData";
-import { generateOutreach, generateAccountOutreach, type Outreach } from "@/lib/outreach";
+import { generateOutreach, generateAccountOutreach, generateMultiOutreach, type Outreach } from "@/lib/outreach";
 import { SIGNAL_EMOJI } from "@/lib/signalMeta";
 
 interface Props {
   account: Account;
   signal?: Signal;
+  multiSignals?: Signal[];
   accountSignals: Signal[];
   onClose: () => void;
 }
 
-export function OutreachPanel({ account, signal, accountSignals, onClose }: Props) {
-  const base: Outreach | null = signal
+export function OutreachPanel({ account, signal, multiSignals, accountSignals, onClose }: Props) {
+  const isMulti = !!multiSignals && multiSignals.length > 1;
+  const base: Outreach | null = isMulti
+    ? generateMultiOutreach(account, multiSignals!)
+    : signal
     ? generateOutreach(account, signal)
     : generateAccountOutreach(account, accountSignals);
 
@@ -23,7 +27,9 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
   const [copied, setCopied] = useState(false);
 
   // Reset when account/signal changes or regenerate
-  const resetKey = `${account.id}:${signal?.id ?? "account"}`;
+  const resetKey = `${account.id}:${
+    isMulti ? "multi:" + multiSignals!.map((s) => s.id).sort().join(",") : signal?.id ?? "account"
+  }`;
   const lastKey = useRef(resetKey);
   useEffect(() => {
     if (lastKey.current !== resetKey) {
@@ -51,6 +57,7 @@ export function OutreachPanel({ account, signal, accountSignals, onClose }: Prop
       </aside>
     );
   }
+
 
   const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
