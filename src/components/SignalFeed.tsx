@@ -124,9 +124,17 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
           <Stat icon={TrendingUp} label="Signals" value={accountSignals.length.toString()} />
           <Stat icon={Zap} label="High urgency" value={highCount.toString()}
             tone={highCount > 0 ? "high" : undefined} />
-          {account.contractValue !== undefined && (
-            <Stat icon={DollarSign} label="Contract" value={formatCurrency(account.contractValue)} />
-          )}
+          {account.contractCeiling !== undefined &&
+            account.contractValue !== undefined &&
+            account.contractStart !== undefined &&
+            account.renewalMonths !== undefined && (
+              <ContractStats
+                ceiling={account.contractCeiling}
+                spent={account.contractValue}
+                contractStart={account.contractStart}
+                renewalMonths={account.renewalMonths}
+              />
+            )}
         </div>
       </div>
 
