@@ -238,7 +238,7 @@ export const signals: Signal[] = [
     source: "Internal Usage Data",
     timestamp: daysAgo(7),
     description:
-      "SFT workstream for Python, TypeScript, and Rust code completion is at 92% of contracted volume and on pace. However Rust batches have been rejected 3 times in the last 30 days due to annotator calibration gaps on language-specific idioms.",
+      "SFT workstream for Python, TypeScript, and Rust code completion is at 92% of contracted volume and on pace. However Rust batches have been rejected 3 times in the last 30 days.",
     classification: "Risk",
     urgency: "High",
   }),
@@ -618,7 +618,7 @@ export const signals: Signal[] = [
     accountId: "helix",
     type: "Relationship",
     source: "Gong",
-    timestamp: daysAgo(6),
+    timestamp: daysAgo(7),
     description:
       'Call transcript — Marcus to Michael: "I don\'t know why we keep getting batches that fail on Rust ownership patterns. This is the third time. At some point this becomes a vendor problem, not a feedback problem."',
     classification: "Risk",
@@ -628,7 +628,7 @@ export const signals: Signal[] = [
     accountId: "helix",
     type: "Relationship",
     source: "Fireflies",
-    timestamp: daysAgo(12),
+    timestamp: daysAgo(6),
     description:
       "Dani has joined the company supporting the Eval workstream. No one from AfterQuery has met with her yet.",
     classification: "Opportunity",
