@@ -398,6 +398,16 @@ export const signals: Signal[] = [
     classification: "Risk",
     urgency: "Medium",
   }),
+  s({
+    accountId: "arclight",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(2),
+    description:
+      "Arclight has used 78% of ceiling with 3 months remaining but workstream stalled 11 days ago. Without reactivation, renewal conversation will be difficult to anchor above current value.",
+    classification: "Risk",
+    urgency: "High",
+  }),
 
   // Vanta — expansion
   s({
