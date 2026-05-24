@@ -54,6 +54,9 @@ export const accounts: Account[] = [
     contactRole: "Head of Post-Training",
     contactEmail: "priya.shah@helixai.com",
     contractValue: 480_000,
+    contractCeiling: 2_000_000,
+    contractStart: monthsAgo(8),
+    renewalMonths: 4,
   },
 
   {
@@ -66,6 +69,9 @@ export const accounts: Account[] = [
     contactRole: "VP Research Operations",
     contactEmail: "marcus.chen@meridianlabs.com",
     contractValue: 1_800_000,
+    contractCeiling: 2_200_000,
+    contractStart: monthsAgo(10),
+    renewalMonths: 2,
   },
   {
     id: "synthos",
@@ -77,6 +83,9 @@ export const accounts: Account[] = [
     contactRole: "Director of Model Training",
     contactEmail: "elena.volkov@synthos.com",
     contractValue: 950_000,
+    contractCeiling: 1_200_000,
+    contractStart: monthsAgo(8),
+    renewalMonths: 2,
   },
   {
     id: "arclight",
@@ -88,6 +97,9 @@ export const accounts: Account[] = [
     contactRole: "Head of Post-Training",
     contactEmail: "james.osullivan@arclightai.com",
     contractValue: 3_100_000,
+    contractCeiling: 4_000_000,
+    contractStart: monthsAgo(9),
+    renewalMonths: 3,
   },
   {
     id: "vanta",
@@ -99,6 +111,9 @@ export const accounts: Account[] = [
     contactRole: "Data Lead",
     contactEmail: "aisha.patel@vantaresearch.com",
     contractValue: 620_000,
+    contractCeiling: 800_000,
+    contractStart: monthsAgo(7),
+    renewalMonths: 5,
   },
   {
     id: "quantum",
