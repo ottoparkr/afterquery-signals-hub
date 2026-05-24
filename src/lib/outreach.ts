@@ -233,9 +233,9 @@ const TALKING_POINTS: Record<SignalType, (a: Account, s: Signal) => string[]> = 
   ],
 };
 
-export function generateOutreach(account: Account, signal: Signal): Outreach {
+export function generateOutreach(account: Account, signal: Signal, allSignals?: Signal[]): Outreach {
   return {
-    angle: ANGLE_TEMPLATES[signal.type](account, signal),
+    angle: ANGLE_TEMPLATES[signal.type](account, signal, allSignals),
     emailSubject: SUBJECT_TEMPLATES[signal.type](account),
     emailBody: BODY_TEMPLATES[signal.type](account, signal),
     talkingPoints: TALKING_POINTS[signal.type](account, signal),
@@ -252,7 +252,7 @@ export function generateAccountOutreach(account: Account, signals: Signal[]): Ou
     if (ur !== 0) return ur;
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   })[0];
-  return generateOutreach(account, top);
+  return generateOutreach(account, top, signals);
 }
 
 function buildCombinedAngle(account: Account, sorted: Signal[]): string {
