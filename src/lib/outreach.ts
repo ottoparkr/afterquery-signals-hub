@@ -46,9 +46,18 @@ const VALUE_PROPS_BY_TYPE: Record<SignalType, string[]> = {
   ],
 };
 
-const ANGLE_TEMPLATES: Record<SignalType, (a: Account, s: Signal) => string> = {
-  Funding: (a, s) =>
-    `${a.name} just unlocked fresh capital — the window to become their default training-data partner is open for the next 30–60 days before they lock in vendors. The signal ("${s.description}") points to immediate hiring + throughput pressure.`,
+const ANGLE_TEMPLATES: Record<SignalType, (a: Account, s: Signal, allSignals?: Signal[]) => string> = {
+  Funding: (a, s, allSignals) => {
+    const utilization = a.contractCeiling && a.contractValue ? (a.contractValue / a.contractCeiling) * 100 : 100;
+    const hasDeliveryIssues = allSignals?.some((sig) => sig.type === "Usage" && sig.classification === "Risk") ?? false;
+    const isLowUtilization = utilization < 40;
+
+    if (isLowUtilization && hasDeliveryIssues) {
+      return `${a.name} just raised $500M and AfterQuery is underdelivering on two of three workstreams at the exact moment they have the most capital and urgency. This is a window to reset — lead with accountability on the RLHF TAT slip and Rust SFT quality issues, then reframe the conversation around what AfterQuery can do at scale given their eval infrastructure signal. The risk is not losing the expansion — it is losing the renewal entirely if delivery issues are not addressed first.`;
+    }
+
+    return `${a.name} just unlocked fresh capital — the window to become their default training-data partner is open for the next 30–60 days before they lock in vendors. The signal ("${s.description}") points to immediate hiring + throughput pressure.`;
+  },
   Press: (a, s) =>
     `${a.name}'s public launch creates a forcing function for v-next data and eval coverage. AfterQuery can plug in within the news cycle while internal urgency is highest.`,
   Research: (a) =>
