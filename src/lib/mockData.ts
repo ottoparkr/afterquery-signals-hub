@@ -24,13 +24,22 @@ export interface Account {
   contactName: string;
   contactRole: string;
   contactEmail: string;
-  contractValue?: number; // existing clients only
+  contractValue?: number; // YTD spent (existing clients only)
+  contractCeiling?: number; // total MSA value
+  contractStart?: string; // ISO date contract started
+  renewalMonths?: number; // months until renewal
 }
 
 const daysAgo = (n: number) => {
   const d = new Date();
   d.setDate(d.getDate() - n);
   d.setHours(d.getHours() - Math.floor(Math.random() * 12));
+  return d.toISOString();
+};
+
+const monthsAgo = (n: number) => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - n);
   return d.toISOString();
 };
 
