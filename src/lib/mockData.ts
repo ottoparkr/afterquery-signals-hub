@@ -24,13 +24,22 @@ export interface Account {
   contactName: string;
   contactRole: string;
   contactEmail: string;
-  contractValue?: number; // existing clients only
+  contractValue?: number; // YTD spent (existing clients only)
+  contractCeiling?: number; // total MSA value
+  contractStart?: string; // ISO date contract started
+  renewalMonths?: number; // months until renewal
 }
 
 const daysAgo = (n: number) => {
   const d = new Date();
   d.setDate(d.getDate() - n);
   d.setHours(d.getHours() - Math.floor(Math.random() * 12));
+  return d.toISOString();
+};
+
+const monthsAgo = (n: number) => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - n);
   return d.toISOString();
 };
 
@@ -45,6 +54,9 @@ export const accounts: Account[] = [
     contactRole: "Head of Post-Training",
     contactEmail: "priya.shah@helixai.com",
     contractValue: 480_000,
+    contractCeiling: 2_000_000,
+    contractStart: monthsAgo(8),
+    renewalMonths: 4,
   },
 
   {
@@ -57,6 +69,9 @@ export const accounts: Account[] = [
     contactRole: "VP Research Operations",
     contactEmail: "marcus.chen@meridianlabs.com",
     contractValue: 1_800_000,
+    contractCeiling: 2_200_000,
+    contractStart: monthsAgo(10),
+    renewalMonths: 2,
   },
   {
     id: "synthos",
@@ -68,6 +83,9 @@ export const accounts: Account[] = [
     contactRole: "Director of Model Training",
     contactEmail: "elena.volkov@synthos.com",
     contractValue: 950_000,
+    contractCeiling: 1_200_000,
+    contractStart: monthsAgo(8),
+    renewalMonths: 2,
   },
   {
     id: "arclight",
@@ -79,6 +97,9 @@ export const accounts: Account[] = [
     contactRole: "Head of Post-Training",
     contactEmail: "james.osullivan@arclightai.com",
     contractValue: 3_100_000,
+    contractCeiling: 4_000_000,
+    contractStart: monthsAgo(9),
+    renewalMonths: 3,
   },
   {
     id: "vanta",
@@ -90,6 +111,9 @@ export const accounts: Account[] = [
     contactRole: "Data Lead",
     contactEmail: "aisha.patel@vantaresearch.com",
     contractValue: 620_000,
+    contractCeiling: 800_000,
+    contractStart: monthsAgo(7),
+    renewalMonths: 5,
   },
   {
     id: "quantum",
@@ -218,6 +242,16 @@ export const signals: Signal[] = [
     classification: "Risk",
     urgency: "High",
   }),
+  s({
+    accountId: "helix",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(1),
+    description:
+      "At current spend rate of ~$60K/month, Helix will reach approximately $720K by renewal — 36% of the $2M MSA ceiling. Contract is severely behind pace. Significant workstream expansion required to justify renewal at current contract value.",
+    classification: "Risk",
+    urgency: "High",
+  }),
 
   // Meridian — churn risk
   s({
@@ -258,6 +292,16 @@ export const signals: Signal[] = [
     classification: "Risk",
     urgency: "Medium",
   }),
+  s({
+    accountId: "meridian",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(2),
+    description:
+      "Meridian is at 82% of contract ceiling with 2 months remaining and delivery issues unresolved. Renewal conversation is imminent and at risk. No expansion headroom — focus is retention.",
+    classification: "Risk",
+    urgency: "High",
+  }),
 
   // Synthos — expansion
   s({
@@ -293,6 +337,16 @@ export const signals: Signal[] = [
     source: "Internal Usage Data",
     timestamp: daysAgo(6),
     description: "Burn rate on current contract puts them at 100% utilization 7 weeks before renewal.",
+    classification: "Opportunity",
+    urgency: "High",
+  }),
+  s({
+    accountId: "synthos",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(3),
+    description:
+      "Synthos is on pace to hit 100% contract utilization 7 weeks before renewal. Expansion proposal needed now to capture incremental spend before they look elsewhere.",
     classification: "Opportunity",
     urgency: "High",
   }),
@@ -343,6 +397,16 @@ export const signals: Signal[] = [
     description: "Surge AI announced new code-reasoning data product with case study from rival lab.",
     classification: "Risk",
     urgency: "Medium",
+  }),
+  s({
+    accountId: "arclight",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(2),
+    description:
+      "Arclight has used 78% of ceiling with 3 months remaining but workstream stalled 11 days ago. Without reactivation, renewal conversation will be difficult to anchor above current value.",
+    classification: "Risk",
+    urgency: "High",
   }),
 
   // Vanta — expansion
