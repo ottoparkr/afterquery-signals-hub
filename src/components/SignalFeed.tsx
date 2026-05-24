@@ -227,16 +227,18 @@ function StatTile({
   value,
   sub,
   subColor,
+  valueColor,
 }: {
   label: string;
   value: string;
   sub?: string;
   subColor?: string;
+  valueColor?: string;
 }) {
   return (
     <div className="flex flex-col justify-center w-[120px] h-[72px] px-3 py-2 rounded-md border border-border bg-surface">
       <span className="text-[11px] text-muted-foreground leading-tight">{label}</span>
-      <span className="text-[15px] font-bold text-foreground leading-tight mt-0.5">{value}</span>
+      <span className={`text-[15px] font-bold leading-tight mt-0.5 ${valueColor || "text-foreground"}`}>{value}</span>
       {sub && <span className={`text-[10px] leading-tight mt-0.5 ${subColor || "text-muted-foreground"}`}>{sub}</span>}
     </div>
   );
