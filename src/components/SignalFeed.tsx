@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Zap, TrendingUp, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import type { Account, Signal, SignalType, Classification } from "@/lib/mockData";
 
 import { SIGNAL_EMOJI, URGENCY_CLASS, timeAgo, formatCurrency } from "@/lib/signalMeta";
@@ -121,9 +121,8 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
 
         {/* Stats */}
         <div className="flex gap-2 mt-4 flex-wrap">
-          <Stat icon={TrendingUp} label="Signals" value={accountSignals.length.toString()} />
-          <Stat icon={Zap} label="High urgency" value={highCount.toString()}
-            tone={highCount > 0 ? "high" : undefined} />
+          <StatTile label="Signals" value={accountSignals.length.toString()} />
+          <StatTile label="High urgency" value={highCount.toString()} />
           {account.contractCeiling !== undefined &&
             account.contractValue !== undefined &&
             account.contractStart !== undefined &&
@@ -223,16 +222,24 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
   );
 }
 
-function Stat({ icon: Icon, label, value, tone }: { icon: typeof Zap; label: string; value: string; tone?: "high" }) {
+function StatTile({
+  label,
+  value,
+  sub,
+  subColor,
+  valueColor,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+  subColor?: string;
+  valueColor?: string;
+}) {
   return (
-    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-surface ${
-      tone === "high" ? "border-[color:var(--urgency-high)]/40" : ""
-    }`}>
-      <Icon className={`size-3.5 ${tone === "high" ? "text-[color:var(--urgency-high)]" : "text-muted-foreground"}`} />
-      <span className="text-[11px] text-muted-foreground">{label}</span>
-      <span className={`text-xs font-semibold ${tone === "high" ? "text-[color:var(--urgency-high)]" : "text-foreground"}`}>
-        {value}
-      </span>
+    <div className="flex flex-col justify-center w-[120px] h-[72px] px-3 py-2 rounded-md border border-border bg-surface">
+      <span className="text-[11px] text-muted-foreground leading-tight">{label}</span>
+      <span className={`text-[15px] font-bold leading-tight mt-0.5 ${valueColor || "text-foreground"}`}>{value}</span>
+      {sub && <span className={`text-[10px] leading-tight mt-0.5 ${subColor || "text-muted-foreground"}`}>{sub}</span>}
     </div>
   );
 }
@@ -253,7 +260,7 @@ function ContractStats({
   const nowMs = Date.now();
   const elapsedMonths = Math.max(0, (nowMs - startMs) / (1000 * 60 * 60 * 24 * 30.4375));
   const totalMonths = elapsedMonths + renewalMonths;
-  const expected = totalMonths > 0 ? (elapsedMonths / totalMonths) * 100 : 0;
+  const expected = totalMonths > 0 ? (elapsedMonths / totalMonths) * 100 : 1;
   const diff = utilization - expected;
 
   let paceLabel = "On pace";
@@ -270,25 +277,26 @@ function ContractStats({
   if (renewalMonths < 3) renewalColor = "text-risk";
   else if (renewalMonths <= 6) renewalColor = "text-amber-400";
 
+  const renewalDate = new Date(nowMs + renewalMonths * 30.4375 * 24 * 60 * 60 * 1000);
+  const renewalDateStr = renewalDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
   return (
     <>
-      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
-        <span className="text-[10px] text-muted-foreground leading-tight">MSA</span>
-        <span className="text-xs font-semibold text-foreground leading-tight">{formatCurrency(ceiling)}</span>
-      </div>
-      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
-        <span className="text-[10px] text-muted-foreground leading-tight">Spent</span>
-        <span className="text-xs font-semibold text-foreground leading-tight">{formatCurrency(spent)}</span>
-      </div>
-      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
-        <span className="text-[10px] text-muted-foreground leading-tight">Utilization</span>
-        <span className="text-xs font-semibold text-foreground leading-tight">{Math.round(utilization)}%</span>
-        <span className={`text-[10px] font-medium leading-tight ${paceColor}`}>{paceLabel}</span>
-      </div>
-      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
-        <span className="text-[10px] text-muted-foreground leading-tight">Renewal</span>
-        <span className={`text-xs font-semibold leading-tight ${renewalColor}`}>{renewalMonths} mo</span>
-      </div>
+      <StatTile label="MSA" value={formatCurrency(ceiling)} />
+      <StatTile label="Spent" value={formatCurrency(spent)} />
+      <StatTile
+        label="Utilization"
+        value={`${Math.round(utilization)}%`}
+        sub={paceLabel}
+        subColor={paceColor}
+      />
+      <StatTile
+        label="Renewal"
+        value={`${renewalMonths} mo`}
+        valueColor={renewalColor}
+        sub={`Renews ${renewalDateStr}`}
+        subColor={renewalColor}
+      />
     </>
   );
 }
