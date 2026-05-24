@@ -17,7 +17,7 @@ export function OutreachPanel({ account, signal, multiSignals, accountSignals, o
   const base: Outreach | null = isMulti
     ? generateMultiOutreach(account, multiSignals!)
     : signal
-    ? generateOutreach(account, signal)
+    ? generateOutreach(account, signal, accountSignals)
     : generateAccountOutreach(account, accountSignals);
 
   const [to, setTo] = useState(account.contactEmail);
