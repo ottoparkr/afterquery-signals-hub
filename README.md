@@ -81,6 +81,7 @@ to help AMs/SPLs act faster and smarter on both existing accounts and new prospe
    channel so nothing gets missed
 7. **Mobile view** — collapse to a single-panel signal feed for AMs reviewing accounts 
    on the go
+8. **Negotiation Framework** — Assist AMs/SPLs with negotiation tactics.
 
 ## AI tools used
 
