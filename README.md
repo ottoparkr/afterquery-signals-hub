@@ -29,7 +29,7 @@ to help AMs/SPLs act faster and smarter on both existing accounts and new prospe
 - Each signal tagged with type, source, timestamp, Risk/Opportunity classification, 
   and urgency (High / Medium / Low)
 - Filter by signal type, Risk/Opportunity, and time window (Today / 7D / 30D / 90D / All)
-- Helix AI signals reflect the exact account scenario from the strategy doc: $500M raise, 
+- Helix AI signals aim to reflect the account scenario from the strategy doc: $500M raise, 
   Rust SFT batch rejections, RLHF TAT slip, eval workstream stall, Clyde competitor 
   release, and Priya engagement cooling
 
