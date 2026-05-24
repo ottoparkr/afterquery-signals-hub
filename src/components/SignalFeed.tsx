@@ -293,6 +293,7 @@ function ContractStats({
       <StatTile
         label="Renewal"
         value={`${renewalMonths} mo`}
+        valueColor={renewalColor}
         sub={`Renews ${renewalDateStr}`}
         subColor={renewalColor}
       />
