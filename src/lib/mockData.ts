@@ -292,6 +292,16 @@ export const signals: Signal[] = [
     classification: "Risk",
     urgency: "Medium",
   }),
+  s({
+    accountId: "meridian",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(2),
+    description:
+      "Meridian is at 82% of contract ceiling with 2 months remaining and delivery issues unresolved. Renewal conversation is imminent and at risk. No expansion headroom — focus is retention.",
+    classification: "Risk",
+    urgency: "High",
+  }),
 
   // Synthos — expansion
   s({
