@@ -242,6 +242,16 @@ export const signals: Signal[] = [
     classification: "Risk",
     urgency: "High",
   }),
+  s({
+    accountId: "helix",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(1),
+    description:
+      "At current spend rate of ~$60K/month, Helix will reach approximately $720K by renewal — 36% of the $2M MSA ceiling. Contract is severely behind pace. Significant workstream expansion required to justify renewal at current contract value.",
+    classification: "Risk",
+    urgency: "High",
+  }),
 
   // Meridian — churn risk
   s({
