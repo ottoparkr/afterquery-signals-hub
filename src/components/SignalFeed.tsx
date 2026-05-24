@@ -121,9 +121,8 @@ export function SignalFeed({ account, signals, onGenerate, onGenerateMulti, onOp
 
         {/* Stats */}
         <div className="flex gap-2 mt-4 flex-wrap">
-          <Stat icon={TrendingUp} label="Signals" value={accountSignals.length.toString()} />
-          <Stat icon={Zap} label="High urgency" value={highCount.toString()}
-            tone={highCount > 0 ? "high" : undefined} />
+          <StatTile label="Signals" value={accountSignals.length.toString()} />
+          <StatTile label="High urgency" value={highCount.toString()} />
           {account.contractCeiling !== undefined &&
             account.contractValue !== undefined &&
             account.contractStart !== undefined &&
