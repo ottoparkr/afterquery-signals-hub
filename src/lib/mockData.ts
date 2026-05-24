@@ -340,6 +340,16 @@ export const signals: Signal[] = [
     classification: "Opportunity",
     urgency: "High",
   }),
+  s({
+    accountId: "synthos",
+    type: "Usage",
+    source: "Internal Usage Data",
+    timestamp: daysAgo(3),
+    description:
+      "Synthos is on pace to hit 100% contract utilization 7 weeks before renewal. Expansion proposal needed now to capture incremental spend before they look elsewhere.",
+    classification: "Opportunity",
+    urgency: "High",
+  }),
 
   // Arclight — churn risk + expansion
   s({
