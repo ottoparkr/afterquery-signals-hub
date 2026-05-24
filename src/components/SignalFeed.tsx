@@ -237,6 +237,62 @@ function Stat({ icon: Icon, label, value, tone }: { icon: typeof Zap; label: str
   );
 }
 
+function ContractStats({
+  ceiling,
+  spent,
+  contractStart,
+  renewalMonths,
+}: {
+  ceiling: number;
+  spent: number;
+  contractStart: string;
+  renewalMonths: number;
+}) {
+  const utilization = ceiling > 0 ? (spent / ceiling) * 100 : 0;
+  const startMs = new Date(contractStart).getTime();
+  const nowMs = Date.now();
+  const elapsedMonths = Math.max(0, (nowMs - startMs) / (1000 * 60 * 60 * 24 * 30.4375));
+  const totalMonths = elapsedMonths + renewalMonths;
+  const expected = totalMonths > 0 ? (elapsedMonths / totalMonths) * 100 : 0;
+  const diff = utilization - expected;
+
+  let paceLabel = "On pace";
+  let paceColor = "text-opportunity";
+  if (diff < -10) {
+    paceLabel = "Behind pace";
+    paceColor = "text-risk";
+  } else if (diff > 10) {
+    paceLabel = "Ahead of pace";
+    paceColor = "text-opportunity";
+  }
+
+  let renewalColor = "text-opportunity";
+  if (renewalMonths < 3) renewalColor = "text-risk";
+  else if (renewalMonths <= 6) renewalColor = "text-amber-400";
+
+  return (
+    <>
+      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
+        <span className="text-[10px] text-muted-foreground leading-tight">MSA</span>
+        <span className="text-xs font-semibold text-foreground leading-tight">{formatCurrency(ceiling)}</span>
+      </div>
+      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
+        <span className="text-[10px] text-muted-foreground leading-tight">Spent</span>
+        <span className="text-xs font-semibold text-foreground leading-tight">{formatCurrency(spent)}</span>
+      </div>
+      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
+        <span className="text-[10px] text-muted-foreground leading-tight">Utilization</span>
+        <span className="text-xs font-semibold text-foreground leading-tight">{Math.round(utilization)}%</span>
+        <span className={`text-[10px] font-medium leading-tight ${paceColor}`}>{paceLabel}</span>
+      </div>
+      <div className="flex flex-col px-3 py-1.5 rounded-md border border-border bg-surface">
+        <span className="text-[10px] text-muted-foreground leading-tight">Renewal</span>
+        <span className={`text-xs font-semibold leading-tight ${renewalColor}`}>{renewalMonths} mo</span>
+      </div>
+    </>
+  );
+}
+
 function SignalCard({
   signal,
   active,
