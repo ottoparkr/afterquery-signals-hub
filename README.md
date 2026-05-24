@@ -108,7 +108,3 @@ prompts Claude helped structure.
   team more resilient to turnover
 - Outreach kept templated (no LLM) for MVP to keep it fast and predictable — Claude API 
   upgrade is the first and most impactful next step
-  
-## Time spent
-
-~6 hours total across strategy doc and artifact
